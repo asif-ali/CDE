@@ -1,7 +1,7 @@
 # CDE — rebrand and diversification concept
 
 A single-page site to present to Chemical Dynamics Enterprises WLL: the CDE brand formalised,
-the existing chemicals business intact, and a new digital division alongside it.
+the existing chemicals business intact, and a new IT services offering alongside it.
 
 `index.html` — self-contained, no build step, no dependencies. Open it in a browser.
 
@@ -23,14 +23,14 @@ Somebody already started moving to CDE and stopped halfway. The site still says
 "Chemical Dynamics Enterprises WLL" in the hero and footer while the metadata says CDE.
 You're proposing they finish it, not start it.
 
-### 2. Divisions, not a renaming
+### 2. A second offering, not a renaming
 
 The legal entity stays **Chemical Dynamics Enterprises WLL** — no CR change, no supplier
 paperwork, no disruption to certifications, LinkedIn or existing contracts. What changes is
 the trading presentation:
 
-- **CDE Process** — the existing chemicals, equipment and instruments business
-- **CDE Digital** — the new systems division
+- **Products & Services** — the existing chemicals, equipment and instruments business
+- **IT Services** — the new offering
 
 The three letters carry the brand; the full name recedes to the footer and legal documents.
 This matters because "Chemical Dynamics Enterprises" argues against diversification every
@@ -100,7 +100,7 @@ read off `chemicaldynamicsqatar.com` directly:
 | Typeface | **Roboto Slab** | All headings and body |
 
 The teal/blue hero gradient echoes the nebula image on their current homepage. Products use
-teal, Digital uses blue — both already in their palette, so the new section reads as part of
+teal, IT Services uses blue — both already in their palette, so the new section reads as part of
 the same brand rather than a bolt-on. Body copy is set in Roboto (same family lineage) rather
 than Roboto Slab, purely because long specification lists in a slab serif get heavy; headings
 stay Roboto Slab so the brand voice is unchanged.
@@ -108,9 +108,9 @@ stay Roboto Slab so the brand voice is unchanged.
 **The homepage leads with what they sell, not with org structure.** An earlier draft opened on
 "two divisions" — but nobody arriving cold cares how the company is organised internally. The
 hero now carries their existing tagline, *"Renowned supplier of Chemicals, Laboratory Equipment
-& Online Analyzers"*, with CDE above it. Digital appears after the full product catalogue,
+& Online Analyzers"*, with CDE above it. IT Services appears after the full product catalogue,
 introduced as *"New from CDE"* — an extension of an established business, which is both more
-honest and more persuasive than presenting a startup division as an equal half of the company.
+honest and more persuasive than presenting a new offering as an equal half of the company.
 
 **Page order deliberately mirrors their existing navigation** — About CDE, Products & Services,
 Contact — with one new section inserted. It's an addition to a site they already know, not a
@@ -139,7 +139,7 @@ back, they need real ones (years trading, sites served, client count).
 | Client names / logos | Their nav has a "Customers" link that goes nowhere |
 | Supplier & principal brands | They have a Suppliers page; the brands they represent are a credibility asset worth showing |
 | Photography | Plant, lab and team images — the current site's stock photos are weak |
-| Digital case study | Even one before/after would de-risk the new division enormously |
+| IT case study | Even one before/after would de-risk the new offering enormously |
 | CR number and any ISO certifications | Standard trust signals for Qatari industrial procurement |
 
 **On capability claims:** every service listed is deliverable today. The earlier industrial

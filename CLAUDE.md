@@ -8,9 +8,8 @@ A single-page pitch site for **Chemical Dynamics Enterprises WLL** (CDE), a Doha
 chemicals, laboratory equipment and online analyzers. It proposes two things at once: formalising
 the CDE brand, and adding an **IT Services** offering alongside the existing chemicals business.
 
-(`README.md` still refers to the two sides as *CDE Process* and *CDE Digital* in the pitch
-argument, while the site itself is headed "IT Services" — a naming inconsistency to resolve
-before presenting.)
+The two sides are named **Products & Services** and **IT Services** throughout. Earlier drafts
+called them *CDE Process* and *CDE Digital*; that naming is retired — don't reintroduce it.
 
 It is a client-facing concept to be presented, not a running product. `README.md` is the pitch
 argument and the design rationale — read it before making content or design changes, because most
