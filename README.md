@@ -36,44 +36,52 @@ The three letters carry the brand; the full name recedes to the footer and legal
 This matters because "Chemical Dynamics Enterprises" argues against diversification every
 time it's said out loud. "CDE" doesn't.
 
-### 3. Why the IT division isn't a random bolt-on
+### 3. The IT services are a distribution play — be honest about that
 
-This is the part that makes the pitch land. CDE already sells:
+An earlier draft of this site sold industrial digitalisation: SCADA on the dosing skids,
+LIMS in the labs, data historians, OT security. It made a much stronger strategic story —
+but **none of it was deliverable**, and none of it appeared anywhere in CDE's own material.
+It has been removed. What's on the site now is the standard business IT stack, all of which
+can actually be delivered today.
 
-- TOC, COD/BOD, chlorine dioxide and online laser turbidity analyzers
-- pH, conductivity and ORP controllers, online scale monitors
-- dissolved oxygen sensors
-- automated dosing skids for bulk oil & gas
-- and their own Products page already advertises *"automatic control and process
-  integration services"*
+That changes the argument, and it's worth being clear-eyed about how:
 
-There is a digital business sitting inside the chemicals business that nobody has named.
-Every one of those instruments produces data that currently goes into a logbook.
+- **What CDE does *not* have** is a unique capability. Anyone in Doha can build a website.
+  There's no technical moat here.
+- **What CDE *does* have** is trust and access — an established Qatari company with premises,
+  a client base across the country's largest industries, and existing commercial relationships
+  with businesses that all need websites, email, IT support and e-invoicing readiness.
 
-So CDE Digital isn't diversification away from chemicals — it's **selling more into accounts
-they already own**. They don't need to win a new client to sell a SCADA project; they need to
-call the plant manager they spoke to last week about biocide. That is a fundamentally easier
-sale than cold-selling IT in Doha, and it's the reason this works for CDE and wouldn't work
-for a generic IT firm.
+So the sale isn't "we're the best IT firm in Qatar." It's "you already buy from us, you
+already trust us, and you need this anyway." That's a real advantage, but it's a
+**distribution** advantage rather than a capability one — which means pricing and delivery
+quality matter more than they would if CDE had something proprietary.
 
-**The line to use:** *from the dosing skid to the dashboard.*
+**Near-term hook:** Qatar's Council of Ministers approved the e-invoicing law in May 2026,
+with a phased rollout expected from 2027 — large firms first. CDE's existing clients are
+exactly the large firms in the first phase. That's a concrete, dated reason to open the
+conversation this year rather than "someday", and it's the one place where CDE's existing
+client list is a genuine, specific advantage.
 
 ---
 
-## What the Digital division covers
+## What the IT Services section covers
 
-Three groups, deliberately ordered from "closest to what they already do" outwards:
+Four groups, all drawn from the Nexvera service stack — nothing here is aspirational:
 
-| Group | Why CDE can credibly sell it |
+| Group | Contents |
 |---|---|
-| **Plant & Process Systems** — SCADA/HMI, remote analyzer monitoring, real-time dashboards, historians, predictive maintenance, OT/IT security | They installed the equipment. They know the process. |
-| **Laboratory Systems** — LIMS, sample tracking, instrument interfacing, automated certificates of analysis, calibration scheduling | They equip the labs and supply the reagents. |
-| **Business Systems** — ERP, e-invoicing readiness, inventory, document management, M365, cyber security, web | The general IT layer, sold on the back of an existing trusted relationship. |
+| **Websites & Applications** | Websites and landing pages (Arabic + English), iOS/Android apps, customer portals and online ordering, custom applications, hosting and maintenance |
+| **Business IT & Security** | Business email and Microsoft 365, day-to-day support and helpdesk, backups and disaster recovery, cyber security, networks and devices |
+| **Business Systems & Compliance** | E-invoicing readiness, invoicing/CRM/workflow automation, inventory and procurement, document management, integration and data migration |
+| **Brand & Digital Marketing** | Logo and brand identity, Google Business Profile and local SEO, LinkedIn and social media, paid campaigns, company profiles and datasheets |
 
-**Near-term hook:** Qatar's Council of Ministers approved the e-invoicing law in May 2026,
-with a phased rollout expected from 2027 — large firms first. CDE's clients are exactly the
-large industrial firms in the first phase. That's a concrete, dated reason to start a
-conversation this year rather than "someday".
+**Two items from the Nexvera Qatar poster were deliberately left out.** POS systems with
+Talabat/Snoonu/Rafeeq integration, and TikTok/Snapchat campaigns, are aimed at cafés and
+retail. CDE's audience is oil & gas, power and fertiliser — putting delivery-app integration
+on this page would undercut the whole proposition. Social media is framed as LinkedIn-led for
+the same reason. Easy to add back if CDE wants to chase SME clients too, but it should be a
+deliberate decision rather than a copy-paste.
 
 ---
 
@@ -134,10 +142,16 @@ back, they need real ones (years trading, sites served, client count).
 | Digital case study | Even one before/after would de-risk the new division enormously |
 | CR number and any ISO certifications | Standard trust signals for Qatari industrial procurement |
 
-**One honest caveat to raise with them:** the site sells SCADA, LIMS and OT security. Before
-publishing, CDE needs to be able to deliver or subcontract those credibly — an industrial
-client will ask for references on the first call. Worth agreeing what's genuinely deliverable
-in phase one versus what's aspirational, and trimming the list accordingly.
+**On capability claims:** every service listed is deliverable today. The earlier industrial
+digitalisation content (SCADA, LIMS, historians, predictive maintenance, OT security) was
+removed precisely because it wasn't — it was inferred from CDE's product catalogue rather than
+from anything they'd said they could do. If CDE later partners with an automation
+integrator, that content can come back; until then it stays off the site.
+
+**The one claim still worth checking:** the site says "an established Qatari company with
+premises in Doha and a client base across the country's largest industries." That's taken from
+their own About page, but confirm they're comfortable with the wording — and get the founding
+year, which would strengthen it considerably.
 
 ---
 
