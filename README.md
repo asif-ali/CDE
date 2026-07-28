@@ -79,15 +79,38 @@ conversation this year rather than "someday".
 
 ## Design decisions worth explaining
 
-**A different visual identity to the chemicals site.** Deep petrol navy, IBM Plex Sans and
-Plex Mono, technical grid overlay — engineering-industrial rather than consumer. The two
-divisions get their own accent colours (teal for Process, blue for Digital) used consistently
-in section headers, card rules and tags, so a reader always knows which division they're
-looking at.
+**Their own colours and typeface, sampled from the live site.** Nothing invented — these were
+read off `chemicaldynamicsqatar.com` directly:
 
-**The logo mark is two overlapping rings** — reads as a molecular diagram and as a Venn of
-the two divisions at the same time. It's a placeholder: swap in their real CDE mark before
-presenting if they have one they like.
+| Token | Value | Where it's used on their current site |
+|---|---|---|
+| Teal | `#25AFB4` | Brand accent, links, "Enterprises WLL" in the logo |
+| Slate | `#4C5166` | Headings, primary buttons |
+| Blue | `#2480C3` | Active nav item, secondary buttons |
+| Grey | `#858A9F` | Body copy |
+| Backgrounds | `#FFFFFF` / `#F9F9F9`, `#EAEAEA` rules | Section alternation |
+| Typeface | **Roboto Slab** | All headings and body |
+
+The teal/blue hero gradient echoes the nebula image on their current homepage. Products use
+teal, Digital uses blue — both already in their palette, so the new section reads as part of
+the same brand rather than a bolt-on. Body copy is set in Roboto (same family lineage) rather
+than Roboto Slab, purely because long specification lists in a slab serif get heavy; headings
+stay Roboto Slab so the brand voice is unchanged.
+
+**The homepage leads with what they sell, not with org structure.** An earlier draft opened on
+"two divisions" — but nobody arriving cold cares how the company is organised internally. The
+hero now carries their existing tagline, *"Renowned supplier of Chemicals, Laboratory Equipment
+& Online Analyzers"*, with CDE above it. Digital appears after the full product catalogue,
+introduced as *"New from CDE"* — an extension of an established business, which is both more
+honest and more persuasive than presenting a startup division as an equal half of the company.
+
+**Page order deliberately mirrors their existing navigation** — About CDE, Products & Services,
+Contact — with one new section inserted. It's an addition to a site they already know, not a
+rebuild they have to re-learn.
+
+**The logo mark is a placeholder.** Their real one is a circular molecular emblem with
+"Chemical Dynamics" in slate and "Enterprises WLL" in teal. The SVG here approximates it;
+swap in the real asset (`chemical.png` on their server, or the source file) before presenting.
 
 **The invented statistics are gone.** The current homepage shows "96% ACCURACY / 95%
 SUCCESS-RATE / 92% BETTER DATA / 98% COST-EFFECTIVE" with nothing behind them. For an
