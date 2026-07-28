@@ -29,7 +29,11 @@
   --max:1180px; --gut:clamp(20px,5vw,50px); --r:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:86px}
+/* Deliberately less than the 83px header: every anchor target is a <section> with
+   80px top padding, so we let the sticky header sit over most of that dead space
+   and land on the heading instead of on blank padding. */
+html{scroll-behavior:smooth;scroll-padding-top:36px}
+#top{scroll-margin-top:83px}   /* main has no padding of its own — send the logo link to the very top */
 body{background:var(--bg);color:var(--grey);font-family:var(--sans);
   font-size:16.5px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4,h5{font-family:var(--slab);color:var(--slate);font-weight:700;line-height:1.25}
