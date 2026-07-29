@@ -152,6 +152,50 @@ everywhere above it, and the IT services are still sold as CDE's own.
 
 ---
 
+## Technology partners — and what was deliberately left out
+
+CDE supplied three documents on 2026-07-29: their own `CDE IT Division` brief, VezTek USA's
+capability statement, and TruSense's company profile. Two capability cards (Artificial
+Intelligence & Data, Immersive Training & Simulation) and a "Specialist partners" block now
+draw on them.
+
+**The relationship is documented, not asserted.** VezTek's own capability statement lists their
+Qatar contact as *Tariq Sheikh, Regional Director, gm@chemicaldynamicsqatar.com,
++974 7014 1198* — CDE's own domain and the phone number already on this site. CDE genuinely
+represents them.
+
+**All wording on the page follows CDE's own brief**, not the partners' decks.
+
+### What was excluded, and why it matters
+
+**VezTek's capability statement is marked "Confidential — prepared for discussion purposes
+only" on every case-study page.** It names Toyota, Warner Bros., DirecTV, Canon, the U.S.
+Department of Homeland Security and the Transportation Security Administration, and describes
+a $48M bank transformation, a $200M+ compliance platform, and an identity programme across 450
+high-security locations serving 60,000 personnel.
+
+**None of that is on the site and none of it should go on the site.** It is marked confidential,
+it concerns third parties who have not agreed to appear in CDE's marketing, and several
+engagements are anonymised in the deck but described in enough detail to be identifiable.
+Publishing it would expose CDE and VezTek both. If CDE wants to use any of it, VezTek must give
+written clearance on specific, agreed wording — that is a conversation, not a copy-paste.
+
+TruSense's profile carries no confidentiality marking and reads as material intended for
+sharing; CDE's own brief repeats its project list with public YouTube links. Even so, only
+capability-level description is used — no client names, no project titles.
+
+### Worth pursuing
+
+TruSense's portfolio is unusually well matched to CDE's actual business, and this is the most
+under-used thing in the three documents:
+
+- **VR safety and hazardous-environment training** — CDE's clients are oil & gas and power plants
+- **A VR chemistry lab with 90+ experiments** — CDE equips the laboratories these would train
+- **Equipment and procedure simulators** — CDE installs the dosing skids and analyzers being simulated
+
+That is a far stronger story than generic IT, and it is the one genuinely differentiated thing
+CDE can offer. Worth a dedicated conversation, and a case study if one can be cleared.
+
 ## Suppliers, and their own product images
 
 **The principals section is the strongest credibility asset on the page**, and it costs nothing —

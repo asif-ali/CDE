@@ -122,8 +122,9 @@ section{padding:80px 0}
 .rule.b{background:var(--blue)}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
-/* Four cards in a three-up auto-fit grid leave an orphan on the second row,
-   so the IT Services set is paired 2x2 once there's room for it. */
+/* .g4 paired four cards 2x2 to avoid an orphan third row. The IT set is six now,
+   which fills a three-up grid evenly, so the override is no longer applied —
+   kept because any future four-card grid will want it. */
 @media(min-width:840px){.grid.g4{grid-template-columns:repeat(2,1fr)}}
 .c{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;
   border-top:3px solid var(--teal)}
@@ -143,6 +144,20 @@ section{padding:80px 0}
 .c li:before{content:'';position:absolute;left:0;top:13px;width:6px;height:6px;
   border-radius:50%;background:var(--teal)}
 .c.b li:before{background:var(--blue)}
+
+/* ---------------- technology partners ---------------- */
+.tp{margin-top:52px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);
+  padding:38px 34px}
+.tphead{max-width:700px;margin-bottom:26px}
+.tphead h3{font-size:22px;margin:10px 0 10px}
+.tphead p{font-size:16px}
+.tpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+.tpc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;
+  border-left:3px solid var(--blue)}
+.tpc b{font-family:var(--slab);font-size:18px;color:var(--slate);display:block}
+.tpc .loc{display:block;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--blue);font-weight:500;margin:4px 0 12px}
+.tpc p{font-size:15px}
 
 /* ---------------- suppliers ---------------- */
 .brands{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -477,7 +492,7 @@ footer a:hover{color:#8AD8DB}
       <p>Built, run and maintained for you — as a one-off project or a monthly retainer.</p>
     </div>
 
-    <div class="grid g4">
+    <div class="grid">
       <div class="c b">
         <div class="chead">
           <img src="assets/products/it-web.jpg" alt="A website design displayed on a laptop" loading="lazy">
@@ -544,6 +559,74 @@ footer a:hover{color:#8AD8DB}
           <li>Paid campaigns, managed and reported on</li>
           <li>Company profiles, brochures and datasheets</li>
         </ul>
+      </div>
+
+      <!-- Delivered with VezTek USA — see the partners note below. Wording follows
+           CDE's own "CDE IT Division" brief, not VezTek's confidential deck. -->
+      <div class="c b">
+        <div class="chead">
+          <img src="assets/products/it-ai.jpg" alt="Abstract visualisation of a neural network" loading="lazy">
+          <div>
+            <h4>Artificial Intelligence &amp; Data</h4>
+            <div class="sub">Applied, not experimental</div>
+          </div>
+        </div>
+        <ul>
+          <li>AI readiness, strategy and governance</li>
+          <li>Generative AI, assistants and intelligent automation</li>
+          <li>Machine learning and predictive analytics</li>
+          <li>Enterprise knowledge and document intelligence</li>
+          <li>Data engineering and systems integration</li>
+        </ul>
+      </div>
+
+      <!-- Delivered with TruSense. -->
+      <div class="c b">
+        <div class="chead">
+          <img src="assets/products/it-vr.jpg" alt="An engineer using a virtual reality headset for technical training" loading="lazy">
+          <div>
+            <h4>Immersive Training &amp; Simulation</h4>
+            <div class="sub">VR built for high-stakes work</div>
+          </div>
+        </div>
+        <ul>
+          <li>Safety and hazardous-environment training</li>
+          <li>Emergency response and technical procedures</li>
+          <li>Plant, equipment and process simulators</li>
+          <li>Virtual chemistry and laboratory training</li>
+          <li>Competency assessment with real-time analysis</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Technology partners. CDE is VezTek's named Qatar contact in their own
+         capability statement, so this is a documented relationship rather than a
+         claim. Descriptions follow CDE's "CDE IT Division" brief. -->
+    <div class="tp">
+      <div class="tphead">
+        <div class="eyebrow" style="color:var(--blue)">Delivered with</div>
+        <h3>Specialist partners behind the work</h3>
+        <p>The everyday IT is ours. For artificial intelligence and immersive
+          simulation we represent specialists, so you get their depth with a
+          contract and a contact here in Doha.</p>
+      </div>
+      <div class="tpgrid">
+        <div class="tpc">
+          <b>VezTek USA</b>
+          <span class="loc">Los Angeles, California</span>
+          <p>Artificial intelligence, emerging technology and digital transformation.
+            Founded in 2006, VezTek helps enterprises and government entities apply AI
+            to modernise operations and improve decision-making — with delivery
+            experience across the GCC.</p>
+        </div>
+        <div class="tpc">
+          <b>TruSense</b>
+          <span class="loc">Poland</span>
+          <p>Custom photorealistic VR and AI-powered simulation, built to Unreal Engine
+            quality for oil &amp; gas, aviation, engineering, education and healthcare.
+            A decade of work and more than 40 projects, each built around the client's
+            own environment and procedures.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -636,6 +719,8 @@ footer a:hover{color:#8AD8DB}
             <option>Business email, IT support &amp; security</option>
             <option>E-invoicing readiness &amp; business systems</option>
             <option>Brand, print &amp; digital marketing</option>
+            <option>Artificial intelligence &amp; data</option>
+            <option>Immersive training &amp; simulation (VR)</option>
           </optgroup>
           <option>Something else</option>
         </select>
@@ -679,6 +764,7 @@ footer a:hover{color:#8AD8DB}
           <li><a href="#digital">Business IT &amp; security</a></li>
           <li><a href="#digital">E-invoicing &amp; business systems</a></li>
           <li><a href="#digital">Brand &amp; digital marketing</a></li>
+          <li><a href="#digital">AI, data &amp; VR simulation</a></li>
           <li><a href="#contact">Contact us</a></li>
         </ul>
       </div>

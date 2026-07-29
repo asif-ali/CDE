@@ -99,9 +99,17 @@ These come from decisions already made with the client; don't reverse them incid
   `f412ea4`. Do not reintroduce that class of claim unless CDE partners with an automation
   integrator. The only automation wording CDE themselves publish is *"Automatic control and
   process Integration services"*, on their dosing pumps page.
-- The four IT Services groups (Websites & Applications, Business IT & Security, Business Systems
-  & Compliance, Brand & Digital Marketing) are drawn from the real Nexvera service stack.
-  New services belong on the page only if they come from that stack.
+- Four of the six IT Services groups (Websites & Applications, Business IT & Security, Business
+  Systems & Compliance, Brand & Digital Marketing) are drawn from the real Nexvera service stack.
+  The other two (Artificial Intelligence & Data, Immersive Training & Simulation) are delivered
+  with named partners — VezTek USA and TruSense — and are attributed in the "Specialist partners"
+  block rather than implied to be in-house. New services belong on the page only if they come
+  from the Nexvera stack or a documented partner.
+- **VezTek's capability statement is marked confidential** and names Toyota, Warner Bros.,
+  DirecTV, Canon, DHS and TSA, with figures from a $48M bank programme and a 450-site federal
+  identity project. **None of it may go on the site** without written clearance from VezTek on
+  agreed wording. Card copy follows CDE's own `CDE IT Division` brief instead. TruSense's profile
+  is unmarked, but only capability-level description is used from it — no client or project names.
 - **POS systems (Talabat/Snoonu/Rafeeq) and TikTok/Snapchat campaigns are deliberately omitted**
   even though Nexvera offers them — they target cafés and retail, and CDE's audience is oil &
   gas, power and fertiliser. Social is framed LinkedIn-first for the same reason. Adding them
