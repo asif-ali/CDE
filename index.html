@@ -34,6 +34,7 @@
    and land on the heading instead of on blank padding. */
 html{scroll-behavior:smooth;scroll-padding-top:36px}
 #top{scroll-margin-top:83px}   /* main has no padding of its own — send the logo link to the very top */
+#suppliers{scroll-margin-top:16px}  /* 64px padding, not a section's 80 — lands level with the rest */
 body{background:var(--bg);color:var(--grey);font-family:var(--sans);
   font-size:16.5px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4,h5{font-family:var(--slab);color:var(--slate);font-weight:700;line-height:1.25}
@@ -225,6 +226,7 @@ footer a:hover{color:#8AD8DB}
     <nav class="nlinks">
       <a href="#about">About CDE</a>
       <a href="#products">Products &amp; Services</a>
+      <a href="#suppliers">Suppliers</a>
       <a href="#digital">IT Services</a>
       <a href="#why">Why CDE</a>
       <a href="#contact">Contact</a>
@@ -421,7 +423,7 @@ footer a:hover{color:#8AD8DB}
 <!-- ============ SUPPLIERS / PRINCIPALS ============ -->
 <!-- Taken verbatim from their own Suppliers page. These are real trading
      relationships and the strongest credibility asset the site has. -->
-<div class="brands">
+<div class="brands" id="suppliers">
   <div class="wrap">
     <div class="sh">
       <div class="rule"></div>
@@ -469,8 +471,13 @@ footer a:hover{color:#8AD8DB}
 
     <div class="grid g4">
       <div class="c b">
-        <h4>Websites &amp; Applications</h4>
-        <div class="sub">Your presence online</div>
+        <div class="chead">
+          <img src="assets/products/it-web.jpg" alt="A website design displayed on a laptop" loading="lazy">
+          <div>
+            <h4>Websites &amp; Applications</h4>
+            <div class="sub">Your presence online</div>
+          </div>
+        </div>
         <ul>
           <li>Websites and landing pages, Arabic and English</li>
           <li>Mobile applications for iOS and Android</li>
@@ -481,8 +488,13 @@ footer a:hover{color:#8AD8DB}
       </div>
 
       <div class="c b">
-        <h4>Business IT &amp; Security</h4>
-        <div class="sub">Day-to-day support</div>
+        <div class="chead">
+          <img src="assets/products/it-support.jpg" alt="IT staff working in a server room" loading="lazy">
+          <div>
+            <h4>Business IT &amp; Security</h4>
+            <div class="sub">Day-to-day support</div>
+          </div>
+        </div>
         <ul>
           <li>Business email and Microsoft 365</li>
           <li>Day-to-day IT support and helpdesk</li>
@@ -493,8 +505,13 @@ footer a:hover{color:#8AD8DB}
       </div>
 
       <div class="c b">
-        <h4>Business Systems &amp; Compliance</h4>
-        <div class="sub">Running the operation</div>
+        <div class="chead">
+          <img src="assets/products/it-systems.jpg" alt="Invoices and business paperwork on a desk" loading="lazy">
+          <div>
+            <h4>Business Systems &amp; Compliance</h4>
+            <div class="sub">Running the operation</div>
+          </div>
+        </div>
         <ul>
           <li>E-invoicing readiness for Qatar's incoming mandate</li>
           <li>Invoicing, CRM and workflow automation</li>
@@ -505,8 +522,13 @@ footer a:hover{color:#8AD8DB}
       </div>
 
       <div class="c b">
-        <h4>Brand &amp; Digital Marketing</h4>
-        <div class="sub">Being found and remembered</div>
+        <div class="chead">
+          <img src="assets/products/it-brand.jpg" alt="Printed brand identity sheets" loading="lazy">
+          <div>
+            <h4>Brand &amp; Digital Marketing</h4>
+            <div class="sub">Being found and remembered</div>
+          </div>
+        </div>
         <ul>
           <li>Logo, brand identity and print</li>
           <li>Google Business Profile and local SEO</li>
@@ -639,6 +661,7 @@ footer a:hover{color:#8AD8DB}
           <li><a href="#products">Equipment &amp; membranes</a></li>
           <li><a href="#products">Dosing systems</a></li>
           <li><a href="#products">Lab equipment &amp; analyzers</a></li>
+          <li><a href="#suppliers">Suppliers &amp; principals</a></li>
         </ul>
       </div>
       <div>

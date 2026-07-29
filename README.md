@@ -161,6 +161,15 @@ uniform text rather than a ragged mix of logos and names. **Ask each principal f
 assets** — distributors get logo packs and high-res product photography free on request, and
 that is also the fastest route to replacing the stock imagery.
 
+**Why there is no logo wall yet.** Sourcing the missing eight from the open web was attempted
+and abandoned: hach.com blocks automated requests (403), injecta.it, turbotech.com and
+unicoh.co.kr don't resolve from here, and SEBCHEM and PENTA TECHSECURE have no domain given
+anywhere on CDE's site. That caps a scraped logo wall at roughly four of ten, which reads as
+unfinished rather than credible — worse than the clean text the section has now. There's also a
+permissions point: displaying a principal's mark to show you distribute their products is normal
+trade practice, but the mark still belongs to them, and a logo pack comes with usage rules worth
+having in writing. Request the assets; the wall is a twenty-minute job once they arrive.
+
 **Their own product images are now used, at the only size they can support.** The eight images on
 their Products & Services page are 187–458px catalogue thumbnails of 8–22KB. They cannot carry a
 hero or a banner, so they appear as 64px square thumbnails on the six product cards, cropped from
@@ -197,6 +206,19 @@ laboratory       1581093577421-f561a654a353
 it-network       1558494949-ef010cbdcc31
 doha             1662050196100-6f8afc83d585
 ```
+
+The four IT Services cards also carry stock thumbnails, same licence:
+
+```
+products/it-web.jpg      1487014679447-9f8336841d58   website on a laptop
+products/it-support.jpg  1573164713988-8665fc963095   staff in a server room
+products/it-systems.jpg  1554224155-1696413565d3      invoices and paperwork
+products/it-brand.jpg    1530435460869-d13625c69bbf   printed brand identity sheets
+```
+
+**Note the mix in `assets/products/`.** The six `water/process/carbon/equipment/dosing/lab`
+thumbnails are crops of **CDE's own catalogue images**; the four `it-*` ones are **stock**.
+Only the second group needs replacing.
 
 Selection rules applied, worth keeping if these get swapped: nothing showing another
 company's branding (several otherwise-good industrial shots were rejected for visible
