@@ -148,6 +148,30 @@ back, they need real ones (years trading, sites served, client count).
 
 ---
 
+## Suppliers, and their own product images
+
+**The principals section is the strongest credibility asset on the page**, and it costs nothing —
+all ten names are taken verbatim from their own Suppliers page: HACH, INJECTA, INEOS, TURBOTECH,
+UNICOH, SEBCHEM, YUMING VALVE, LETONE, SAFEGAS and PENTA TECHSECURE. HACH (water analysis) and
+INEOS (petrochemicals) in particular do more for a procurement engineer's confidence than any
+photograph will.
+
+They hold logo files for only two of the ten (LETONE and SAFEGAS), so the section is set as
+uniform text rather than a ragged mix of logos and names. **Ask each principal for their brand
+assets** — distributors get logo packs and high-res product photography free on request, and
+that is also the fastest route to replacing the stock imagery.
+
+**Their own product images are now used, at the only size they can support.** The eight images on
+their Products & Services page are 187–458px catalogue thumbnails of 8–22KB. They cannot carry a
+hero or a banner, so they appear as 64px square thumbnails on the six product cards, cropped from
+the centre — every one downscaled or upscaled by no more than 1.15×.
+
+One was rejected: `Picture4.jpg` (cooling towers) **carries a stock-library watermark badge**,
+which suggests it was taken without a licence. It should come off their live site too.
+
+The others are almost certainly manufacturer catalogue shots rather than CDE's own — normal
+enough in distribution, but worth confirming with the principals rather than assuming.
+
 ## Photography — placeholders, and they must be replaced
 
 The site had no images at all, which is what the client reacted to. Five photographs now
@@ -193,7 +217,8 @@ equipped, their team, their Doha premises.
 |---|---|
 | Vector logo | The PNGs work on screen; print needs the original AI/EPS/SVG |
 | Year established | Hero eyebrow says "Established in Qatar" — a date would be stronger |
-| Client names / logos | Their nav has a "Customers" link that goes nowhere |
+| Client names / logos | Their nav has a "Customers" link, and the page behind it returns 404 — worth telling them regardless of this project |
+| Principal brand assets | Only 2 of 10 suppliers have logo files on their site; the rest will supply them free on request |
 | Supplier & principal brands | They have a Suppliers page; the brands they represent are a credibility asset worth showing |
 | **Real photography** | The five images on the page are stock placeholders — see above |
 | IT case study | Even one before/after would de-risk the new offering enormously |
@@ -217,6 +242,10 @@ year, which would strengthen it considerably.
 - `index.html` plus an `assets/` folder — no build step and no dependencies, but no longer a
   single file, because the client asked for photography and base64-embedding ~1.2MB of JPEG
   would be worse than a folder. Still opens straight from disk. Fonts load from Google Fonts.
+- The contact section embeds Google Maps via the keyless `maps?q=…&output=embed` form, so it
+  needs no Google Cloud API key or billing account. It is a third-party iframe that sets cookies,
+  which matters if they ever want a cookie banner or a strict privacy policy. Styled maps, custom
+  markers or guaranteed API stability would require the Maps Embed API and a key.
 - The enquiry form opens a pre-filled `mailto:` to `info@chemicaldynamicsqatar.com`. Wire it
   to a real form handler (Formspree, Web3Forms, or their host) before launch — `mailto:` is
   fine for a demo but loses leads in practice.

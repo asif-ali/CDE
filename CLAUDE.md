@@ -107,13 +107,38 @@ These come from decisions already made with the client; don't reverse them incid
   you need this anyway", not "we're the best IT firm in Qatar". Don't write copy claiming
   technical superiority or a proprietary edge.
 
+## Single page, for now — and why
+
+Splitting into a multi-page site was considered on 2026-07-29 and deferred. The reasons, so this
+doesn't get relitigated from scratch:
+
+- There isn't content to fill it — no real photography, no client list (their own Customers page
+  404s), no case study. Four thin pages read worse than one substantial one.
+- **There is no mobile menu.** `.nlinks` simply hides below 1020px. Survivable with anchor links
+  on one page; a blocker for multi-page, which would have to build it first.
+- No build step means every page hand-duplicates the header and footer, and they drift. Fixing
+  that properly means a static generator, which costs the "opens from disk, host anywhere"
+  property that makes this easy to hand over.
+
+Revisit once CDE approves the direction and supplies content. The split then mirrors their
+existing nav: Home / Products & Services / IT Services / Suppliers / Contact.
+
 ## Assets
 
 `assets/cde-emblem.png` is the client's genuine logo mark, taken from their own server; the
 `-white` variant is the same file recoloured for the dark footer. Both are real brand assets —
 don't substitute a drawn approximation. Only web PNGs exist; the vector original is still to come.
 
-**The five photographs are stock placeholders and none of them show CDE.** They are Unsplash-
+`assets/products/` holds 64px card thumbnails cropped from **CDE's own catalogue images**, taken
+from their live Products page. Those sources are 187–458px, which is why they appear only at
+thumbnail size — do not scale them up into banners. `Picture4.jpg` (cooling towers) was excluded
+because it carries a stock-library watermark.
+
+The ten principals in the Suppliers section (HACH, INJECTA, INEOS and so on) are quoted verbatim
+from CDE's own Suppliers page — real trading relationships, not illustrative names. Don't add to
+that list without a source.
+
+**The five large photographs are stock placeholders and none of them show CDE.** They are Unsplash-
 licensed (commercial use, no attribution needed) and exist so the page reads as finished. They
 must be replaced with CDE's own photography before launch — README documents each one, its
 source ID and the selection rules (no third-party branding visible, no emissions imagery on a
