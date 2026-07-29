@@ -27,10 +27,14 @@ Fonts are the only external dependency (Google Fonts CDN).
 
 ## Architecture
 
-Everything lives in `index.html` (~580 lines): `<style>` in the head, markup, then a ~20-line
-`<script>` at the bottom. Keep it that way — self-contained single file with no build step is a
-requirement of the deliverable, not an accident. Do not introduce a bundler, framework, CSS file
-or npm dependency.
+All markup, CSS and JS live in `index.html`: `<style>` in the head, markup, then a ~20-line
+`<script>` at the bottom. Binary assets live in `assets/`. **No build step and no dependencies**
+is the requirement — do not introduce a bundler, framework, CSS file or npm dependency, and keep
+CSS and JS inline in the one file.
+
+It was a single self-contained file until the client asked for photography; base64-embedding
+~1.2MB of JPEG was worse than a folder, so `assets/` exists now. That is the only reason to add
+one — new *code* still belongs inline.
 
 Structure, top to bottom: sticky header → hero → industries strip → About → Products & Services →
 "New from CDE" band → IT Services → Why CDE → Contact → footer. Sections are linked by
@@ -57,13 +61,22 @@ Everything is driven by the custom properties in `:root`. Colours were sampled f
 
 Class names are terse and reused rather than semantic-per-section: `.wrap` (max-width container),
 `.sh` (section heading block), `.c` (card), `.st` (numbered step), `.btn`, `.eyebrow`, `.rule`.
+Imagery adds `.ph` (a photo absolutely filling its parent, used as a section background — the
+parent needs `position:relative;overflow:hidden` and an explicit `z-index` order) and `.figure`
++ `.cap` (a bordered, rounded photo with a gradient caption over its foot).
 A trailing `.b` modifier switches a component from teal to blue — `.c.b`, `.sh.b`, `.rule.b`.
 That teal/blue split is load-bearing: it visually separates the chemicals catalogue from the new
 IT services while keeping both inside the client's existing palette. Preserve it.
 
 Layout is CSS grid with `auto-fit`/`minmax`, so cards reflow without per-breakpoint rules. The
-only explicit breakpoints are 1020px (nav links hide — note there is **no** mobile menu yet),
-900px and 820px.
+content box is 1080px (1180px `.wrap` minus 2×50px gutter) — worth knowing, because `minmax`
+minimums interact with it in ways that orphan the last card if you add one. `.grid.g4` pairs
+the four IT cards 2×2 for exactly that reason. The explicit breakpoints are 1020px (nav links
+hide — note there is **no** mobile menu yet), 900px, 840px and 820px.
+
+Headless Chrome clamps its viewport to a 500px minimum, so it cannot screenshot a 390px phone
+layout — a capture at `--window-size=390` renders at 500 and crops, which looks like an overflow
+bug but isn't. Verify narrow layouts at 500px, or measure `documentElement.scrollWidth`.
 
 ## Content rules
 
@@ -94,12 +107,23 @@ These come from decisions already made with the client; don't reverse them incid
   you need this anyway", not "we're the best IT firm in Qatar". Don't write copy claiming
   technical superiority or a proprietary edge.
 
+## Assets
+
+`assets/cde-emblem.png` is the client's genuine logo mark, taken from their own server; the
+`-white` variant is the same file recoloured for the dark footer. Both are real brand assets —
+don't substitute a drawn approximation. Only web PNGs exist; the vector original is still to come.
+
+**The five photographs are stock placeholders and none of them show CDE.** They are Unsplash-
+licensed (commercial use, no attribution needed) and exist so the page reads as finished. They
+must be replaced with CDE's own photography before launch — README documents each one, its
+source ID and the selection rules (no third-party branding visible, no emissions imagery on a
+page selling water treatment, blue-dominant hero to sit inside the gradient).
+
 ## Known placeholders
 
-The header/footer logo SVG is an approximation of the client's real circular molecular emblem and
-should be swapped for the real asset. The contact form is `mailto:`-only. `README.md` ("Before this
-goes live") lists the remaining content gaps — real logo, year established, client names, supplier
-brands, photography, an IT case study, CR number and ISO certifications.
+The contact form is `mailto:`-only. `README.md` ("Before this goes live") lists the remaining
+content gaps — vector logo, year established, client names, supplier brands, real photography,
+an IT case study, CR number and ISO certifications.
 
 One live claim still needs checking with CDE: *"an established Qatari company with premises in
 Doha and a client base across the country's largest industries"* in the "Why CDE" section.

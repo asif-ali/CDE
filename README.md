@@ -3,7 +3,7 @@
 A single-page site to present to Chemical Dynamics Enterprises WLL: the CDE brand formalised,
 the existing chemicals business intact, and a new IT services offering alongside it.
 
-`index.html` — self-contained, no build step, no dependencies. Open it in a browser.
+`index.html` + `assets/` — no build step, no dependencies. Open it in a browser.
 
 ---
 
@@ -116,9 +116,27 @@ honest and more persuasive than presenting a new offering as an equal half of th
 Contact — with one new section inserted. It's an addition to a site they already know, not a
 rebuild they have to re-learn.
 
-**The logo mark is a placeholder.** Their real one is a circular molecular emblem with
-"Chemical Dynamics" in slate and "Enterprises WLL" in teal. The SVG here approximates it;
-swap in the real asset (`chemical.png` on their server, or the source file) before presenting.
+**The logo is now their real one.** Pulled from their own server and stored in `assets/`:
+
+| File | Source | Used for |
+|---|---|---|
+| `cde-emblem.png` | `wp-content/uploads/2024/01/CDE.png` (522×522) | Header mark |
+| `cde-emblem-white.png` | The same file, recoloured white | Footer mark, on the dark band |
+| `cde-logo-full.png` | `wp-content/uploads/2024/01/chemical.png` (300×65) | Kept for reference; not currently placed |
+
+The emblem is `#2480C3` — exactly the blue already in the palette, which is a useful
+coincidence: the mark needs no adjustment to sit in the design. In the full lockup
+"Chemical Dynamics" is black and "Enterprises WLL" is `#00587E`. *(An earlier version of
+this README described it as slate and teal. That was wrong — these values are sampled
+from the file.)*
+
+The header pairs the real emblem with the **CDE** wordmark rather than dropping in the full
+lockup, because the lockup leads with "Chemical Dynamics Enterprises WLL" and works against
+the CDE-forward argument in section 1. The emblem is the part of their identity people
+recognise, and at 522px it stays sharp on any screen — the 300×65 lockup would not.
+
+**Still worth asking for:** the original vector (AI/EPS/SVG). Everything here is derived from
+web PNGs, which is fine on screen but not for print.
 
 **The invented statistics are gone.** The current homepage shows "96% ACCURACY / 95%
 SUCCESS-RATE / 92% BETTER DATA / 98% COST-EFFECTIVE" with nothing behind them. For an
@@ -130,15 +148,54 @@ back, they need real ones (years trading, sites served, client count).
 
 ---
 
+## Photography — placeholders, and they must be replaced
+
+The site had no images at all, which is what the client reacted to. Five photographs now
+carry it. **All five are stock and none of them show CDE.** They are there so the page reads
+as a finished design; they are not evidence of anything.
+
+| Position | File | Shows |
+|---|---|---|
+| Hero background | `hero-plant.jpg` | Petrochemical plant at blue hour |
+| About | `water-treatment.jpg` | Aerial of clarifiers and filter beds |
+| Products & Services | `laboratory.jpg` | Analyst at a lab bench |
+| IT Services band | `it-network.jpg` | Network cabling (dark, used as texture) |
+| Contact | `doha.jpg` | Doha skyline |
+
+Source: [Unsplash](https://unsplash.com), under the Unsplash License — free for commercial
+use, no attribution required, no permission needed. The originals are
+`images.unsplash.com/photo-…` at these IDs:
+
+```
+hero-plant       1588011930968-eadac80e6a5a
+water-treatment  1533077162801-86490c593afb
+laboratory       1581093577421-f561a654a353
+it-network       1558494949-ef010cbdcc31
+doha             1662050196100-6f8afc83d585
+```
+
+Selection rules applied, worth keeping if these get swapped: nothing showing another
+company's branding (several otherwise-good industrial shots were rejected for visible
+workwear logos), nothing showing heavy emissions on a site selling water treatment, and
+a blue-dominant hero so the photograph sits inside the existing gradient rather than
+fighting it.
+
+**Replace these with CDE's own photography before launch.** A buyer who reverse-image-searches
+a "plant" photo and finds it on a stock library has learned something you didn't want to
+teach them. Priority order: their own dosing skids and installed analyzers, a lab they
+equipped, their team, their Doha premises.
+
+---
+
 ## Before this goes live — content still needed
 
 | Gap | Note |
 |---|---|
-| Real CDE logo file | Currently a placeholder SVG mark |
+| Vector logo | The PNGs work on screen; print needs the original AI/EPS/SVG |
 | Year established | Hero eyebrow says "Established in Qatar" — a date would be stronger |
 | Client names / logos | Their nav has a "Customers" link that goes nowhere |
 | Supplier & principal brands | They have a Suppliers page; the brands they represent are a credibility asset worth showing |
-| Photography | Plant, lab and team images — the current site's stock photos are weak |
+| **Real photography** | The five images on the page are stock placeholders — see above |
 | IT case study | Even one before/after would de-risk the new offering enormously |
 | CR number and any ISO certifications | Standard trust signals for Qatari industrial procurement |
 
@@ -157,7 +214,9 @@ year, which would strengthen it considerably.
 
 ## Technical notes
 
-- Single file, ~29KB, no dependencies. Fonts load from Google Fonts.
+- `index.html` plus an `assets/` folder — no build step and no dependencies, but no longer a
+  single file, because the client asked for photography and base64-embedding ~1.2MB of JPEG
+  would be worse than a folder. Still opens straight from disk. Fonts load from Google Fonts.
 - The enquiry form opens a pre-filled `mailto:` to `info@chemicaldynamicsqatar.com`. Wire it
   to a real form handler (Formspree, Web3Forms, or their host) before launch — `mailto:` is
   fine for a demo but loses leads in practice.

@@ -64,13 +64,27 @@ header{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid 
 .btn.o{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.7)}
 .btn.o:hover{background:#fff;color:var(--slate);border-color:#fff}
 
+/* ---------------- imagery ---------------- */
+/* Photos sit under a brand-coloured wash so they read as part of the palette
+   rather than as dropped-in stock. See README for swap-out instructions. */
+.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.figure{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);
+  position:relative;background:var(--bg2)}
+.figure img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:26px 22px 14px;color:#fff;
+  font-size:13px;letter-spacing:.4px;
+  background:linear-gradient(transparent,rgba(43,47,61,.78))}
+
 /* ---------------- hero ---------------- */
 .hero{position:relative;overflow:hidden;text-align:center;padding:104px 0 108px;
   background:linear-gradient(125deg,#3E4A6B 0%,#2E7E92 42%,#25AFB4 72%,#2480C3 100%)}
-.hero:before{content:'';position:absolute;inset:0;
+/* z-index kept explicit: the photo must sit under both gradient washes, and a
+   pseudo-element would otherwise paint beneath it by DOM order. */
+.hero .ph{opacity:.30;mix-blend-mode:luminosity;z-index:0}
+.hero:before{content:'';position:absolute;inset:0;z-index:1;
   background:radial-gradient(38% 46% at 22% 26%,rgba(255,255,255,.20) 0%,transparent 62%),
              radial-gradient(34% 40% at 82% 74%,rgba(36,128,195,.42) 0%,transparent 64%)}
-.hero:after{content:'';position:absolute;inset:0;opacity:.30;
+.hero:after{content:'';position:absolute;inset:0;opacity:.30;z-index:1;
   background-image:radial-gradient(rgba(255,255,255,.6) 1px,transparent 1px);
   background-size:34px 34px;
   -webkit-mask-image:radial-gradient(62% 62% at 50% 50%,#000 0%,transparent 76%);
@@ -102,6 +116,9 @@ section{padding:80px 0}
 .rule.b{background:var(--blue)}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+/* Four cards in a three-up auto-fit grid leave an orphan on the second row,
+   so the IT Services set is paired 2x2 once there's room for it. */
+@media(min-width:840px){.grid.g4{grid-template-columns:repeat(2,1fr)}}
 .c{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;
   border-top:3px solid var(--teal)}
 .c.b{border-top-color:var(--blue)}
@@ -127,14 +144,18 @@ section{padding:80px 0}
 
 /* ---------------- digital intro band ---------------- */
 .newband{background:var(--slate);color:rgba(255,255,255,.82);text-align:center;
-  padding:60px 0}
+  padding:60px 0;position:relative;overflow:hidden}
+.newband .ph{opacity:.22;z-index:0}
+.newband .wrap{position:relative;z-index:1}
 .newband h2{color:#fff;font-size:clamp(24px,3.4vw,34px);max-width:860px;margin:16px auto 0}
 .newband .eyebrow{color:#8AD8DB}
 .newband p{max-width:700px;margin:18px auto 0;font-size:17px}
 
 /* ---------------- why ---------------- */
 .why{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:28px}
+/* 250px min fits only three columns in the 1080px content box, orphaning step 04;
+   238px lets the numbered sequence run 01-04 across one row. */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:28px}
 .st{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px}
 .st .n{font-family:var(--slab);font-size:26px;font-weight:700;color:var(--teal);line-height:1}
 .st b{display:block;font-family:var(--slab);font-size:17.5px;color:var(--slate);margin:12px 0 8px}
@@ -177,19 +198,7 @@ footer a:hover{color:#8AD8DB}
 <header>
   <div class="wrap nav">
     <a href="#top" class="brand">
-      <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
-        <circle cx="23" cy="23" r="21" fill="none" stroke="#4C5166" stroke-width="1.6"/>
-        <circle cx="23" cy="23" r="17.5" fill="none" stroke="#25AFB4" stroke-width="1"/>
-        <g stroke="#4C5166" stroke-width="1.4">
-          <line x1="23" y1="23" x2="12.5" y2="17"/><line x1="23" y1="23" x2="33.5" y2="17"/>
-          <line x1="23" y1="23" x2="23" y2="34.5"/><line x1="23" y1="23" x2="12.5" y2="29"/>
-        </g>
-        <circle cx="23" cy="23" r="4.1" fill="#25AFB4"/>
-        <circle cx="12.5" cy="17" r="2.7" fill="#4C5166"/>
-        <circle cx="33.5" cy="17" r="2.7" fill="#4C5166"/>
-        <circle cx="23" cy="34.5" r="2.7" fill="#2480C3"/>
-        <circle cx="12.5" cy="29" r="2.2" fill="#4C5166"/>
-      </svg>
+      <img src="assets/cde-emblem.png" width="46" height="46" alt="CDE">
       <span class="bt"><b>CDE</b><span>Chemical Dynamics Enterprises WLL</span></span>
     </a>
     <nav class="nlinks">
@@ -207,6 +216,7 @@ footer a:hover{color:#8AD8DB}
 
 <!-- ============ HERO ============ -->
 <section class="hero">
+  <img class="ph" src="assets/hero-plant.jpg" alt="" aria-hidden="true">
   <div class="wrap">
     <div class="heyebrow">CDE &nbsp;·&nbsp; Chemical Dynamics Enterprises WLL</div>
     <h1>Renowned supplier of Chemicals,<br>Laboratory Equipment &amp; Online Analyzers</h1>
@@ -254,11 +264,17 @@ footer a:hover{color:#8AD8DB}
           websites and applications, business email and support, e-invoicing readiness and
           branding — delivered with the same reliability our supply clients expect.</p>
       </div>
+      <div>
+      <div class="figure" style="height:230px;margin-bottom:22px">
+        <img src="assets/water-treatment.jpg" alt="Aerial view of clarifiers and filter beds at a water treatment plant" loading="lazy">
+        <div class="cap">Water and wastewater treatment — clarification, filtration and dosing</div>
+      </div>
       <div class="facts">
         <div class="fact"><span>Company</span><b>Chemical Dynamics Enterprises WLL</b></div>
         <div class="fact"><span>Based in</span><b>Doha, State of Qatar</b></div>
         <div class="fact"><span>Supplying</span><b>Chemicals · Equipment · Analyzers · Systems</b></div>
         <div class="fact"><span>Sectors</span><b>Oil &amp; gas, power, fertilizer, textile, food, pulp &amp; paper, water</b></div>
+      </div>
       </div>
     </div>
   </div>
@@ -273,6 +289,11 @@ footer a:hover{color:#8AD8DB}
       <h2>Chemicals, equipment and instruments</h2>
       <p>Supplies and services for process, water and wastewater treatment plants and
         laboratories — with the technical support to specify, commission and maintain them.</p>
+    </div>
+
+    <div class="figure" style="height:clamp(200px,26vw,320px);margin-bottom:34px">
+      <img src="assets/laboratory.jpg" alt="Analyst working at a laboratory bench with online analyzers and glassware" loading="lazy">
+      <div class="cap">Laboratory equipment, online analyzers and reagents — supplied, commissioned and supported</div>
     </div>
 
     <div class="grid">
@@ -348,6 +369,7 @@ footer a:hover{color:#8AD8DB}
 
 <!-- ============ DIGITAL INTRO ============ -->
 <div class="newband">
+  <img class="ph" src="assets/it-network.jpg" alt="" aria-hidden="true" loading="lazy">
   <div class="wrap">
     <div class="eyebrow">New from CDE</div>
     <h2>IT services for businesses across Qatar</h2>
@@ -367,7 +389,7 @@ footer a:hover{color:#8AD8DB}
       <p>Built, run and maintained for you — as a one-off project or a monthly retainer.</p>
     </div>
 
-    <div class="grid">
+    <div class="grid g4">
       <div class="c b">
         <h4>Websites &amp; Applications</h4>
         <div class="sub">Your presence online</div>
@@ -466,6 +488,10 @@ footer a:hover{color:#8AD8DB}
     </div>
     <div class="crow">
       <div class="cd">
+        <div class="figure" style="height:190px;margin-bottom:24px">
+          <img src="assets/doha.jpg" alt="The Doha skyline across the bay" loading="lazy">
+          <div class="cap">Based in Doha, serving plants and businesses across Qatar</div>
+        </div>
         <div class="row"><div class="k">Address</div>
           <div class="v">First Floor, Doha Souq Mall<br>Al Mirqab Al Jadeed St, PO Box 55015<br>Doha, Qatar</div></div>
         <div class="row"><div class="k">Phone</div>
@@ -519,17 +545,7 @@ footer a:hover{color:#8AD8DB}
     <div class="frow">
       <div>
         <div class="brand" style="margin-bottom:16px">
-          <svg width="44" height="44" viewBox="0 0 46 46" aria-hidden="true">
-            <circle cx="23" cy="23" r="21" fill="none" stroke="#fff" stroke-width="1.6"/>
-            <circle cx="23" cy="23" r="17.5" fill="none" stroke="#25AFB4" stroke-width="1"/>
-            <g stroke="#fff" stroke-width="1.4">
-              <line x1="23" y1="23" x2="12.5" y2="17"/><line x1="23" y1="23" x2="33.5" y2="17"/>
-              <line x1="23" y1="23" x2="23" y2="34.5"/><line x1="23" y1="23" x2="12.5" y2="29"/>
-            </g>
-            <circle cx="23" cy="23" r="4.1" fill="#25AFB4"/>
-            <circle cx="12.5" cy="17" r="2.7" fill="#fff"/><circle cx="33.5" cy="17" r="2.7" fill="#fff"/>
-            <circle cx="23" cy="34.5" r="2.7" fill="#8AD8DB"/><circle cx="12.5" cy="29" r="2.2" fill="#fff"/>
-          </svg>
+          <img src="assets/cde-emblem-white.png" width="44" height="44" alt="CDE">
           <span class="bt"><b style="color:#fff">CDE</b><span>Doha · Qatar</span></span>
         </div>
         <p style="max-width:36ch">Renowned supplier of chemicals, laboratory equipment and
