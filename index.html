@@ -34,7 +34,12 @@
    and land on the heading instead of on blank padding. */
 html{scroll-behavior:smooth;scroll-padding-top:36px}
 #top{scroll-margin-top:83px}   /* main has no padding of its own — send the logo link to the very top */
-#suppliers{scroll-margin-top:16px}  /* 64px padding, not a section's 80 — lands level with the rest */
+/* These two anchors are bands, not sections, so they carry their own padding —
+   the scroll-margin makes their headings land level with the section anchors.
+   #digital deliberately targets the "New from CDE" band rather than the cards
+   below it, so the nav link doesn't skip the introduction. */
+#suppliers{scroll-margin-top:16px}  /* 64px padding, not a section's 80 */
+#digital{scroll-margin-top:20px}    /* 60px padding */
 body{background:var(--bg);color:var(--grey);font-family:var(--sans);
   font-size:16.5px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 h1,h2,h3,h4,h5{font-family:var(--slab);color:var(--slate);font-weight:700;line-height:1.25}
@@ -448,7 +453,7 @@ footer a:hover{color:#8AD8DB}
 </div>
 
 <!-- ============ DIGITAL INTRO ============ -->
-<div class="newband">
+<div class="newband" id="digital">
   <img class="ph" src="assets/it-network.jpg" alt="" aria-hidden="true" loading="lazy">
   <div class="wrap">
     <div class="eyebrow">New from CDE</div>
@@ -460,7 +465,7 @@ footer a:hover{color:#8AD8DB}
 </div>
 
 <!-- ============ DIGITAL ============ -->
-<section id="digital">
+<section>
   <div class="wrap">
     <div class="sh b">
       <div class="rule b"></div>
