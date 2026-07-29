@@ -307,6 +307,37 @@ year, which would strengthen it considerably.
 
 ---
 
+## SEO
+
+Done: title and meta description, canonical, full Open Graph and Twitter card set with an image,
+favicon and apple-touch-icon generated from the real emblem, `theme-color`, robots meta,
+`robots.txt`, `sitemap.xml`, LocalBusiness JSON-LD, one H1 with no heading-level skips, alt text
+on every image, and intrinsic `width`/`height` on all 19 images so nothing shifts as they load.
+
+**Three absolute URLs assume the site is served from `chemicaldynamicsqatar.com`** — the canonical,
+`og:url` and `og:image`. If it launches on any other domain those must change, or link previews
+and canonicalisation point at the wrong place. Same for `sitemap.xml` and `robots.txt`.
+
+**Opening hours are deliberately absent from the structured data.** Nobody has told us what they
+are, and invented hours would put wrong information into Google's knowledge panel — the kind of
+error that gets a business a phone call at the wrong time. Add `openingHoursSpecification` once
+CDE confirms.
+
+### What still limits it
+
+- **One page means one URL.** The site can realistically rank for one cluster of queries. Separate
+  pages for chemicals, laboratory equipment, dosing systems and IT services would each be able to
+  rank for their own terms. This is the strongest argument for going multi-page, and it's worth
+  more than any tag on this list.
+- **No Arabic.** Buyers here are Qatari industrial firms and a large share of search is in Arabic.
+  A bilingual site with `hreflang` is a genuine competitive gap, and the site already promises
+  "Arabic and English throughout" in the Why CDE section — which is currently untrue of the site
+  itself.
+- **No mobile menu.** Nav links just hide below 1020px. Reachable via footer links, but poor.
+- **1.3MB of JPEG.** Converting to WebP would cut it roughly in half and improve LCP.
+- **No Google Business Profile link.** For "chemical supplier Doha" this matters more than
+  on-page work; the structured data helps only if the profile exists and is claimed.
+
 ## Technical notes
 
 - `index.html` plus an `assets/` folder — no build step and no dependencies, but no longer a
