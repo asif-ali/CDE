@@ -86,7 +86,10 @@ These come from decisions already made with the client; don't reverse them incid
   full name belongs in the logo lockup, the About facts panel and the footer only.
 - **No invented statistics.** The client's current site has unbacked percentage claims; removing
   them was a deliberate credibility decision. Only add metrics if given real ones.
-- **No Nexvera attribution anywhere** — CDE presents as a single integrated company.
+- **Nexvera appears only as a footer credit** ("Designed and developed by Nexvera Technologies
+  Ltd", added 2026-07-29 on request, reversing an earlier no-attribution rule). Everywhere above
+  the footer, CDE presents as a single integrated company and the IT services are CDE's own —
+  don't introduce Nexvera into body copy, service descriptions or the About section.
 - Contact details, address, phone and social links are real and taken from the live site. Don't
   edit them without a source.
 - **Only list services that are deliverable today.** This is the most important rule here. An

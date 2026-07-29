@@ -144,7 +144,11 @@ industrial buyer these actively damage credibility — they're the kind of thing
 engineer notices. They've been replaced with a factual company panel. If they want metrics
 back, they need real ones (years trading, sites served, client count).
 
-**No Nexvera attribution anywhere.** CDE presents as a single integrated company, as agreed.
+**Nexvera is credited in the footer** — "Designed and developed by Nexvera Technologies Ltd",
+linking to nexvera.co.uk/qa. This reverses the earlier decision to keep the site free of any
+attribution; it was changed on request on 2026-07-29. The credit is deliberately quiet: small,
+below the copyright line, in the footer only. CDE still presents as a single integrated company
+everywhere above it, and the IT services are still sold as CDE's own.
 
 ---
 
