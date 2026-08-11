@@ -1,0 +1,6 @@
+{
+  "//": "The Edge Function is Deno, not Node. Without this the editor's TypeScript server flags `Deno` as undefined and cannot resolve `jsr:` imports — false errors on code that runs correctly on Supabase. Requires the Deno extension (denoland.vscode-deno). Nothing else in this repo is affected.",
+  "deno.enable": false,
+  "deno.enablePaths": ["supabase/functions"],
+  "deno.lint": true
+}

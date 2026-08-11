@@ -294,6 +294,13 @@ equipped, their team, their Doha premises.
 | IT case study | Even one before/after would de-risk the new offering enormously |
 | CR number and any ISO certifications | Standard trust signals for Qatari industrial procurement |
 
+**Careers form and HR dashboard** (`careers.html`, `admin.html`, added 2026-08-11) have their own
+outstanding items, kept separately in **`CAREERS-SETUP.md`** because they are configuration and
+policy rather than content: a Supabase project to point at, a Cloudflare Turnstile key, HR
+accounts, and a data retention period to agree with CDE. That last one is not optional — the form
+collects QID and passport images, which Qatar's PDPPL says you may not keep indefinitely. Until
+the config blocks are filled in, both pages render but neither can reach a backend.
+
 **On capability claims:** every service listed is deliverable today. The earlier industrial
 digitalisation content (SCADA, LIMS, historians, predictive maintenance, OT security) was
 removed precisely because it wasn't — it was inferred from CDE's product catalogue rather than

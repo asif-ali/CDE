@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Applicants — CDE HR</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#4C5166">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --slate:#4C5166; --slate-d:#3A3E4F;
+  --teal:#25AFB4; --teal-d:#1B8E92; --teal-soft:#E4F5F5;
+  --blue:#2480C3; --blue-soft:#E3F0F9;
+  --grey:#858A9F; --ink:#2B2F3D;
+  --bg:#FFFFFF; --bg2:#F9F9F9; --line:#EAEAEA;
+  --red:#C2413A; --red-soft:#FBEDEC;
+  --amber:#B07D2B; --amber-soft:#FAF1E0;
+  --green:#2E7D57; --green-soft:#E6F3EC;
+  --slab:'Roboto Slab',Georgia,serif;
+  --sans:'Roboto',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+  --r:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+/* Author `display` beats the UA sheet's [hidden] rule regardless of
+   specificity, so .gate{display:flex} would keep the login screen on screen
+   after sign-in. Everything here toggles through .hidden — restate it. */
+[hidden]{display:none !important}
+body{background:var(--bg2);color:var(--grey);font-family:var(--sans);font-size:15.5px;
+  line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--slab);color:var(--slate);font-weight:700;line-height:1.25}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
+.btn{display:inline-block;background:var(--slate);color:#fff;font-weight:500;font-size:14.5px;
+  padding:10px 20px;border-radius:var(--r);border:none;letter-spacing:.4px;transition:background .15s}
+.btn:hover{background:var(--teal)}
+.btn.t{background:var(--teal)}.btn.t:hover{background:var(--slate)}
+.btn.ghost{background:transparent;color:var(--slate);border:1px solid var(--line)}
+.btn.ghost:hover{background:#fff;border-color:var(--teal);color:var(--teal)}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+input,select,textarea{width:100%;background:#fff;border:1px solid var(--line);color:var(--ink);
+  font:inherit;font-size:15px;padding:10px 12px;border-radius:var(--r)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-color:transparent}
+label{display:block;font-size:12px;font-weight:500;color:var(--slate);margin:0 0 6px;
+  letter-spacing:.6px;text-transform:uppercase}
+.err{display:none;background:var(--red-soft);border:1px solid #EFC9C6;color:#8E2E29;
+  border-radius:var(--r);padding:12px 14px;font-size:14.5px;margin-top:16px}
+.err.on{display:block}
+
+/* ---------------- login ---------------- */
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+  background:linear-gradient(135deg,#3E4A6B 0%,#2E7E92 55%,#25AFB4 100%)}
+.gate .box{width:100%;max-width:400px;background:#fff;border-radius:var(--r);padding:36px 32px;
+  box-shadow:0 18px 50px rgba(0,0,0,.18)}
+.gate .lock{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.gate .lock img{width:42px;height:42px}
+.gate .lock b{display:block;font-family:var(--slab);font-size:19px;color:var(--slate)}
+.gate .lock span{display:block;font-size:11.5px;color:var(--teal);letter-spacing:.4px}
+.gate h1{font-size:20px;margin-bottom:6px}
+.gate .sub{font-size:14px;margin-bottom:22px}
+.gate .fld{margin-bottom:16px}
+.gate .btn{width:100%;padding:13px;font-size:15px;margin-top:6px}
+
+/* ---------------- app shell ---------------- */
+.top{background:var(--slate);color:#fff;position:sticky;top:0;z-index:40}
+.top .in{max-width:1400px;margin:0 auto;padding:0 22px;height:64px;display:flex;
+  align-items:center;justify-content:space-between;gap:18px}
+.top .who{display:flex;align-items:center;gap:12px;min-width:0}
+.top .who b{font-family:var(--slab);font-size:17px;color:#fff;white-space:nowrap}
+.top .who span{font-size:12.5px;color:rgba(255,255,255,.6);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.top .out{background:transparent;border:1px solid rgba(255,255,255,.32);color:#fff;
+  padding:8px 16px;border-radius:var(--r);font-size:14px}
+.top .out:hover{background:rgba(255,255,255,.12)}
+.shell{max-width:1400px;margin:0 auto;padding:24px 22px 60px}
+
+/* ---------------- stats ---------------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.stat .n{font-family:var(--slab);font-size:27px;font-weight:700;color:var(--slate);line-height:1.1}
+.stat .k{font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--grey);margin-top:4px}
+.stat.hi .n{color:var(--teal)}
+
+/* ---------------- toolbar ---------------- */
+.bar{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px;
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.bar .search{flex:1 1 240px}
+.bar select{width:auto;min-width:150px}
+.bar .sp{flex:1}
+
+/* ---------------- table ---------------- */
+.tbl{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:820px}
+th{text-align:left;font-family:var(--slab);font-size:11.5px;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--grey);font-weight:600;padding:13px 16px;border-bottom:1px solid var(--line);
+  background:var(--bg2);white-space:nowrap}
+td{padding:13px 16px;border-bottom:1px solid var(--line);color:var(--slate);vertical-align:middle}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--teal-soft)}
+tbody tr:last-child td{border-bottom:none}
+td .nm{font-weight:500}
+td .sub{font-size:12.5px;color:var(--grey)}
+.pill{display:inline-block;font-size:11.5px;letter-spacing:.6px;text-transform:uppercase;
+  font-weight:500;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.p-new{background:var(--teal-soft);color:var(--teal-d)}
+.p-shortlisted{background:var(--blue-soft);color:var(--blue)}
+.p-interviewed{background:var(--amber-soft);color:var(--amber)}
+.p-hired{background:var(--green-soft);color:var(--green)}
+.p-rejected{background:var(--bg2);color:var(--grey)}
+.empty{padding:56px 24px;text-align:center}
+.empty b{display:block;font-family:var(--slab);color:var(--slate);font-size:17px;margin-bottom:6px}
+
+/* ---------------- detail drawer ---------------- */
+.scrim{position:fixed;inset:0;background:rgba(43,47,61,.5);z-index:50;display:none}
+.scrim.on{display:block}
+.draw{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:#fff;z-index:51;
+  transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column}
+.draw.on{transform:none}
+.draw .dh{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;
+  justify-content:space-between;align-items:flex-start;gap:16px}
+.draw .dh h2{font-size:20px}
+.draw .dh .sub{font-size:13px;margin-top:2px}
+.draw .x{background:none;border:none;font-size:24px;color:var(--grey);line-height:1;padding:0 4px}
+.draw .x:hover{color:var(--slate)}
+.draw .db{overflow-y:auto;padding:22px 24px 34px;flex:1}
+.grp{font-family:var(--slab);font-size:11.5px;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--teal);font-weight:600;margin:26px 0 10px}
+.grp:first-child{margin-top:0}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:4px 14px;font-size:14.5px}
+.kv dt{color:var(--grey);font-size:12.5px;padding-top:3px}
+.kv dd{color:var(--slate);word-break:break-word;margin-bottom:8px}
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.docs{grid-template-columns:1fr}.kv{grid-template-columns:1fr}}
+.docs a{display:flex;align-items:center;gap:11px;border:1px solid var(--line);border-radius:var(--r);
+  padding:12px;background:var(--bg2);font-size:14px;color:var(--slate)}
+.docs a:hover{border-color:var(--teal);background:var(--teal-soft)}
+.docs .ic{width:34px;height:34px;flex:0 0 34px;border-radius:var(--r);background:var(--slate);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-family:var(--slab);font-size:10px;
+  font-weight:700;letter-spacing:.4px}
+.docs a.busy{opacity:.5;pointer-events:none}
+.wf{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-top:8px}
+.wf .row{display:flex;gap:10px;align-items:flex-end}
+.wf .row > div{flex:1}
+.saved{font-size:13px;color:var(--green);margin-top:8px;display:none}
+.saved.on{display:block}
+</style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div class="gate" id="gate">
+  <div class="box">
+    <div class="lock">
+      <img src="assets/cde-emblem.png" alt="CDE" width="42" height="42">
+      <span><b>CDE</b><span>HR — Applicants</span></span>
+    </div>
+
+    <form id="loginForm">
+      <h1>Sign in</h1>
+      <p class="sub">Authorised HR staff only.</p>
+      <div class="fld">
+        <label for="lu">Email</label>
+        <input id="lu" type="email" autocomplete="username" required>
+      </div>
+      <div class="fld">
+        <label for="lp">Password</label>
+        <input id="lp" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn t" id="loginBtn" type="submit">Sign in</button>
+      <div class="err" id="loginErr" role="alert"></div>
+    </form>
+
+    <!-- Shown only when the account has a verified TOTP factor -->
+    <form id="mfaForm" hidden>
+      <h1>Verification code</h1>
+      <p class="sub">Enter the six-digit code from your authenticator app.</p>
+      <div class="fld">
+        <label for="lc">Code</label>
+        <input id="lc" inputmode="numeric" autocomplete="one-time-code" maxlength="6"
+               pattern="[0-9]{6}" required>
+      </div>
+      <button class="btn t" id="mfaBtn" type="submit">Verify</button>
+      <div class="err" id="mfaErr" role="alert"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div id="app" hidden>
+  <div class="top">
+    <div class="in">
+      <div class="who">
+        <img src="assets/cde-emblem-white.png" alt="" width="34" height="34">
+        <span><b>Applicants</b></span>
+        <span id="whoEmail"></span>
+      </div>
+      <button class="out" id="signOut" type="button">Sign out</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div class="stats" id="stats"></div>
+
+    <div class="bar">
+      <div class="search">
+        <input id="q" type="search" placeholder="Search name, email, mobile or position…" aria-label="Search applicants">
+      </div>
+      <select id="fStatus" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="new">New</option>
+        <option value="shortlisted">Shortlisted</option>
+        <option value="interviewed">Interviewed</option>
+        <option value="hired">Hired</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <select id="fSort" aria-label="Sort">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <span class="sp"></span>
+      <button class="btn ghost" id="refresh" type="button">Refresh</button>
+      <button class="btn ghost" id="csv" type="button">Export CSV</button>
+    </div>
+
+    <div class="tbl">
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Received</th><th>Applicant</th><th>Position</th>
+              <th>Mobile</th><th>Exp.</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="empty" hidden>
+        <b>No applications yet</b>
+        <span id="emptyWhy">Submissions from the careers form will appear here.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="draw" id="draw" aria-label="Applicant detail">
+  <div class="dh">
+    <div>
+      <h2 id="dName"></h2>
+      <div class="sub" id="dSub"></div>
+    </div>
+    <button class="x" id="dClose" type="button" aria-label="Close">&times;</button>
+  </div>
+  <div class="db" id="dBody"></div>
+</aside>
+
+<script>
+/* =====================================================================
+   CONFIGURATION
+
+   The publishable ("anon") key below is public by design — it identifies the
+   anonymous role, it is not a credential. It grants nothing on its own,
+   because `applications` has row-level security enabled and NO policy for
+   that role: the query runs and returns zero rows. Everything this page can
+   see, it sees through the signed-in user's own token, checked against the
+   `admins` table inside Postgres. Deleting the JavaScript that hides this UI
+   gets an attacker an empty table and a wall of 401s.
+   ===================================================================== */
+const CFG = {
+  url:     'https://YOUR-PROJECT-REF.supabase.co',
+  anonKey: 'YOUR-PUBLISHABLE-ANON-KEY'
+};
+
+const BUCKET = 'applicant-docs';
+
+/* -------------------------------------------------------------- session */
+/* sessionStorage, not localStorage: the session dies with the tab, so a
+   shared or unattended office machine does not stay signed in tomorrow. */
+const SESSION = {
+  get:   () => { try { return JSON.parse(sessionStorage.getItem('cde_hr') || 'null'); }
+                 catch { return null; } },
+  set:   s  => sessionStorage.setItem('cde_hr', JSON.stringify(s)),
+  clear: () => sessionStorage.removeItem('cde_hr')
+};
+
+const el = id => document.getElementById(id);
+const showErr = (node, msg) => { node.textContent = msg; node.classList.add('on'); };
+const hideErr = node => node.classList.remove('on');
+
+/* ---------------------------------------------------------------- auth */
+
+async function auth(path, body){
+  const r = await fetch(CFG.url + '/auth/v1/' + path, {
+    method: 'POST',
+    headers: { apikey: CFG.anonKey, 'content-type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const out = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(out.error_description || out.msg || out.message || 'Sign-in failed.');
+  return out;
+}
+
+let pendingFactor = null;   // set when the account has TOTP enrolled
+
+el('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideErr(el('loginErr'));
+  el('loginBtn').disabled = true;
+  try {
+    const s = await auth('token?grant_type=password', {
+      email: el('lu').value.trim(),
+      password: el('lp').value
+    });
+
+    const factor = (s.user?.factors || []).find(f => f.status === 'verified');
+    if (factor){
+      // Password alone left us at aal1. Hold the session, ask for the code.
+      pendingFactor = { id: factor.id, session: s };
+      el('loginForm').hidden = true;
+      el('mfaForm').hidden = false;
+      el('lc').focus();
+    } else {
+      await start(s);
+    }
+  } catch (ex){
+    // Deliberately vague: distinguishing "no such user" from "wrong password"
+    // turns this form into an account-enumeration oracle.
+    showErr(el('loginErr'), /invalid/i.test(ex.message)
+      ? 'Those details were not recognised.' : ex.message);
+  } finally {
+    el('loginBtn').disabled = false;
+  }
+});
+
+el('mfaForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  hideErr(el('mfaErr'));
+  el('mfaBtn').disabled = true;
+  try {
+    const tok = pendingFactor.session.access_token;
+    const hdr = { apikey: CFG.anonKey, authorization: 'Bearer ' + tok, 'content-type':'application/json' };
+
+    const ch = await (await fetch(
+      CFG.url + '/auth/v1/factors/' + pendingFactor.id + '/challenge',
+      { method:'POST', headers: hdr })).json();
+
+    const r = await fetch(CFG.url + '/auth/v1/factors/' + pendingFactor.id + '/verify', {
+      method: 'POST', headers: hdr,
+      body: JSON.stringify({ challenge_id: ch.id, code: el('lc').value.trim() })
+    });
+    const out = await r.json();
+    if (!r.ok) throw new Error(out.error_description || out.msg || 'That code was not accepted.');
+    await start(out);
+  } catch (ex){
+    showErr(el('mfaErr'), ex.message);
+  } finally {
+    el('mfaBtn').disabled = false;
+  }
+});
+
+async function start(session){
+  SESSION.set(session);
+
+  // Membership check. Not a gate — the gate is in Postgres — but without it a
+  // non-admin employee would sign in successfully and stare at an empty table
+  // with no explanation.
+  const me = await api('admins?select=user_id&limit=1');
+  if (!me || !me.length){
+    SESSION.clear();
+    el('mfaForm').hidden = true;
+    el('loginForm').hidden = false;
+    return showErr(el('loginErr'), 'That account does not have access to applicant records.');
+  }
+
+  el('gate').hidden = true;
+  el('app').hidden  = false;
+  el('whoEmail').textContent = session.user?.email || '';
+  await load();
+}
+
+el('signOut').addEventListener('click', () => {
+  const s = SESSION.get();
+  if (s) fetch(CFG.url + '/auth/v1/logout', {
+    method:'POST',
+    headers:{ apikey: CFG.anonKey, authorization:'Bearer ' + s.access_token }
+  }).catch(() => {});
+  SESSION.clear();
+  location.reload();
+});
+
+function signedOut(){
+  SESSION.clear();
+  el('app').hidden = true;
+  el('gate').hidden = false;
+  el('loginForm').hidden = false;
+  el('mfaForm').hidden = true;
+  showErr(el('loginErr'), 'Your session expired. Please sign in again.');
+}
+
+/* ------------------------------------------------------------------ api */
+
+async function request(path, init = {}, retry = true){
+  const s = SESSION.get();
+  if (!s) { signedOut(); throw new Error('Signed out'); }
+
+  const r = await fetch(CFG.url + path, {
+    ...init,
+    headers: {
+      apikey: CFG.anonKey,
+      authorization: 'Bearer ' + s.access_token,
+      'content-type': 'application/json',
+      ...(init.headers || {})
+    }
+  });
+
+  if (r.status === 401 && retry){
+    // Access tokens are short-lived by design; swap the refresh token for a
+    // new one rather than throwing the user back to the login screen mid-task.
+    try {
+      const fresh = await auth('token?grant_type=refresh_token', { refresh_token: s.refresh_token });
+      SESSION.set(fresh);
+      return request(path, init, false);
+    } catch { signedOut(); throw new Error('Signed out'); }
+  }
+  if (!r.ok) throw new Error('Request failed (' + r.status + ')');
+  return r;
+}
+
+const api = async (q, init) => (await request('/rest/v1/' + q, init)).json();
+
+/* ----------------------------------------------------------------- data */
+
+let ALL = [];
+
+const FIELDS = [
+  'id','created_at','status','position_applied','full_name','fathers_name','email','mobile',
+  'nationality','date_of_birth','qid_number','qid_expiry','passport_number','passport_expiry',
+  'occupation_on_qid','visa_status','address','city','years_experience','expected_salary',
+  'current_employer','previous_employers','driving_license','highest_qualification',
+  'available_from','notes','doc_qid','doc_photo','doc_cv','doc_residence',
+  'consent_given','admin_notes','reviewed_at'
+].join(',');
+
+async function load(){
+  try {
+    // status=neq.pending_upload hides half-finished submissions.
+    ALL = await api('applications?select=' + FIELDS +
+                    '&status=neq.pending_upload&order=created_at.desc&limit=1000');
+    draw();
+  } catch (ex){
+    if (ex.message !== 'Signed out') alert('Could not load applications: ' + ex.message);
+  }
+}
+
+el('refresh').addEventListener('click', load);
+['q','fStatus','fSort'].forEach(id => el(id).addEventListener('input', draw));
+
+function visible(){
+  const q = el('q').value.trim().toLowerCase();
+  const st = el('fStatus').value;
+  let list = ALL.filter(a => {
+    if (st && a.status !== st) return false;
+    if (!q) return true;
+    return [a.full_name, a.email, a.mobile, a.position_applied, a.nationality]
+      .some(v => (v || '').toLowerCase().includes(q));
+  });
+  const sort = el('fSort').value;
+  if (sort === 'old')  list = list.slice().reverse();
+  if (sort === 'name') list = list.slice().sort((a,b) =>
+    (a.full_name||'').localeCompare(b.full_name||''));
+  return list;
+}
+
+/* Date-only values (DOB, expiries) get a time appended so they parse as local
+   midnight. Bare '1992-04-18' parses as UTC, which renders as the 17th for
+   anyone west of Greenwich — wrong on a passport expiry. */
+const fmtDate = s => s
+  ? new Date(s.length === 10 ? s + 'T00:00:00' : s)
+      .toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
+  : '—';
+const fmtWhen = s => s ? new Date(s).toLocaleString('en-GB',
+  { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+const titled  = s => (s||'').charAt(0).toUpperCase() + (s||'').slice(1);
+
+function draw(){
+  const list = visible();
+  const tb = el('rows');
+  tb.textContent = '';
+
+  const counts = { total: ALL.length, new:0, shortlisted:0, interviewed:0, hired:0 };
+  ALL.forEach(a => { if (a.status in counts) counts[a.status]++; });
+
+  const stats = el('stats');
+  stats.textContent = '';
+  [['Total', counts.total, false], ['New', counts.new, true],
+   ['Shortlisted', counts.shortlisted, false], ['Interviewed', counts.interviewed, false],
+   ['Hired', counts.hired, false]].forEach(([k, n, hi]) => {
+    const d = document.createElement('div');
+    d.className = 'stat' + (hi && n ? ' hi' : '');
+    const a = document.createElement('div'); a.className = 'n'; a.textContent = n;
+    const b = document.createElement('div'); b.className = 'k'; b.textContent = k;
+    d.append(a, b);
+    stats.appendChild(d);
+  });
+
+  el('empty').hidden = list.length > 0;
+  el('emptyWhy').textContent = ALL.length
+    ? 'No applications match the current filters.'
+    : 'Submissions from the careers form will appear here.';
+
+  // Every cell below goes in through textContent. Applicant names, employers
+  // and free-text notes are attacker-controlled; one innerHTML here would let
+  // a submitted <script> run inside an authenticated HR session.
+  list.forEach(a => {
+    const tr = document.createElement('tr');
+    tr.tabIndex = 0;
+    tr.addEventListener('click', () => openApplicant(a));
+    tr.addEventListener('keydown', e => { if (e.key === 'Enter') openApplicant(a); });
+
+    const td = (build) => { const c = document.createElement('td'); build(c); tr.appendChild(c); };
+
+    td(c => { c.textContent = fmtDate(a.created_at); });
+    td(c => {
+      const n = document.createElement('div'); n.className = 'nm'; n.textContent = a.full_name || '—';
+      const s = document.createElement('div'); s.className = 'sub'; s.textContent = a.email || '';
+      c.append(n, s);
+    });
+    td(c => {
+      const n = document.createElement('div'); n.textContent = a.position_applied || '—';
+      const s = document.createElement('div'); s.className = 'sub';
+      s.textContent = [a.nationality, a.city].filter(Boolean).join(' · ');
+      c.append(n, s);
+    });
+    td(c => { c.textContent = a.mobile || '—'; c.dir = 'ltr'; });
+    td(c => { c.textContent = a.years_experience != null ? a.years_experience + ' yr' : '—'; });
+    td(c => {
+      const p = document.createElement('span');
+      p.className = 'pill p-' + a.status;
+      p.textContent = titled(a.status);
+      c.appendChild(p);
+    });
+
+    tb.appendChild(tr);
+  });
+}
+
+/* ---------------------------------------------------------------- drawer */
+
+const draw$ = el('draw'), scrim = el('scrim');
+const closeDrawer = () => { draw$.classList.remove('on'); scrim.classList.remove('on'); };
+el('dClose').addEventListener('click', closeDrawer);
+scrim.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+
+function openApplicant(a){
+  el('dName').textContent = a.full_name || '—';
+  el('dSub').textContent  = (a.position_applied || '—') + ' · received ' + fmtWhen(a.created_at);
+
+  const body = el('dBody');
+  body.textContent = '';
+
+  const group = (title, pairs) => {
+    const vals = pairs.filter(([, v]) => v != null && v !== '');
+    if (!vals.length) return;
+    const h = document.createElement('div'); h.className = 'grp'; h.textContent = title;
+    const dl = document.createElement('dl'); dl.className = 'kv';
+    vals.forEach(([k, v]) => {
+      const dt = document.createElement('dt'); dt.textContent = k;
+      const dd = document.createElement('dd'); dd.textContent = v;
+      dl.append(dt, dd);
+    });
+    body.append(h, dl);
+  };
+
+  group('Contact', [
+    ['Email', a.email], ['Mobile', a.mobile],
+    ['Address', [a.address, a.city].filter(Boolean).join(', ')]
+  ]);
+  group('Personal', [
+    ["Father's name", a.fathers_name], ['Nationality', a.nationality],
+    ['Date of birth', a.date_of_birth ? fmtDate(a.date_of_birth) : null]
+  ]);
+  group('Identification', [
+    ['QID number', a.qid_number], ['QID expiry', a.qid_expiry ? fmtDate(a.qid_expiry) : null],
+    ['Passport no.', a.passport_number],
+    ['Passport expiry', a.passport_expiry ? fmtDate(a.passport_expiry) : null],
+    ['Occupation on QID', a.occupation_on_qid], ['Visa status', a.visa_status]
+  ]);
+  group('Experience', [
+    ['Years', a.years_experience != null ? a.years_experience : null],
+    ['Expected salary', a.expected_salary], ['Current employer', a.current_employer],
+    ['Previous employers', a.previous_employers], ['Qualification', a.highest_qualification],
+    ['Driving licence', a.driving_license],
+    ['Available from', a.available_from ? fmtDate(a.available_from) : null],
+    ['Notes', a.notes]
+  ]);
+
+  /* ---- documents: signed on click, valid 60 seconds ---- */
+  const dh = document.createElement('div'); dh.className = 'grp'; dh.textContent = 'Documents';
+  const docs = document.createElement('div'); docs.className = 'docs';
+  [['doc_qid','QID','QID photo'], ['doc_photo','PIC','Photograph'],
+   ['doc_cv','CV','CV / résumé'], ['doc_residence','RES','Proof of residence']]
+  .forEach(([f, tag, label]) => {
+    const link = document.createElement('a');
+    link.href = '#'; link.rel = 'noopener noreferrer';
+    const ic = document.createElement('span'); ic.className = 'ic'; ic.textContent = tag;
+    const tx = document.createElement('span');
+    tx.textContent = a[f] ? label : label + ' — missing';
+    link.append(ic, tx);
+    if (!a[f]) { link.style.opacity = '.45'; link.style.pointerEvents = 'none'; }
+    else link.addEventListener('click', async ev => {
+      ev.preventDefault();
+      link.classList.add('busy');
+      try {
+        // A fresh 60-second URL each time. Nothing long-lived is ever put in
+        // the DOM, in history, or in a copied link.
+        const r = await request('/storage/v1/object/sign/' + BUCKET + '/' + a[f], {
+          method: 'POST', body: JSON.stringify({ expiresIn: 60 })
+        });
+        const { signedURL } = await r.json();
+        window.open(CFG.url + '/storage/v1' + signedURL, '_blank', 'noopener');
+      } catch { alert('Could not open that document.'); }
+      finally { link.classList.remove('busy'); }
+    });
+    docs.appendChild(link);
+  });
+  body.append(dh, docs);
+
+  /* ---- workflow ---- */
+  const wh = document.createElement('div'); wh.className = 'grp'; wh.textContent = 'Review';
+  const wf = document.createElement('div'); wf.className = 'wf';
+
+  const row = document.createElement('div'); row.className = 'row';
+  const sWrap = document.createElement('div');
+  const sLab = document.createElement('label'); sLab.textContent = 'Status';
+  const sel = document.createElement('select');
+  ['new','shortlisted','interviewed','hired','rejected'].forEach(v => {
+    const o = document.createElement('option'); o.value = v; o.textContent = titled(v);
+    if (a.status === v) o.selected = true;
+    sel.appendChild(o);
+  });
+  sWrap.append(sLab, sel);
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'btn t'; saveBtn.type = 'button'; saveBtn.textContent = 'Save';
+  row.append(sWrap, saveBtn);
+
+  const nLab = document.createElement('label');
+  nLab.textContent = 'Internal notes'; nLab.style.marginTop = '14px';
+  const notes = document.createElement('textarea');
+  notes.rows = 3; notes.value = a.admin_notes || '';
+  notes.placeholder = 'Visible to HR only';
+
+  const ok = document.createElement('div'); ok.className = 'saved'; ok.textContent = 'Saved';
+
+  saveBtn.addEventListener('click', async () => {
+    saveBtn.disabled = true; ok.classList.remove('on');
+    try {
+      const s = SESSION.get();
+      await request('/rest/v1/applications?id=eq.' + a.id, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          status: sel.value,
+          admin_notes: notes.value.trim() || null,
+          reviewed_by: s.user?.id || null,
+          reviewed_at: new Date().toISOString()
+        })
+      });
+      a.status = sel.value;
+      a.admin_notes = notes.value.trim() || null;
+      ok.classList.add('on');
+      draw();
+    } catch (ex){
+      if (ex.message !== 'Signed out') alert('Could not save: ' + ex.message);
+    } finally { saveBtn.disabled = false; }
+  });
+
+  wf.append(row, nLab, notes, ok);
+  body.append(wh, wf);
+
+  draw$.classList.add('on');
+  scrim.classList.add('on');
+  body.scrollTop = 0;
+}
+
+/* -------------------------------------------------------------- export */
+
+el('csv').addEventListener('click', () => {
+  const cols = ['created_at','status','position_applied','full_name','fathers_name','email','mobile',
+    'nationality','date_of_birth','qid_number','qid_expiry','passport_number','passport_expiry',
+    'occupation_on_qid','visa_status','address','city','years_experience','expected_salary',
+    'current_employer','previous_employers','highest_qualification','driving_license',
+    'available_from','notes','admin_notes'];
+
+  const cell = v => {
+    let s = v == null ? '' : String(v);
+    // Excel executes a cell beginning =, +, - or @. An applicant who names
+    // themselves =HYPERLINK(...) should not get to run anything on an HR laptop.
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  };
+
+  const csv = '﻿' + [cols.join(',')]
+    .concat(visible().map(a => cols.map(c => cell(a[c])).join(',')))
+    .join('\r\n');
+
+  const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'cde-applicants-' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+
+  // The export is an unencrypted file of QID and passport numbers sitting in
+  // someone's Downloads folder. Saying so is the only control we have over it.
+  alert('Exported ' + visible().length + ' applications.\n\n' +
+        'This file contains personal data — QID and passport numbers. Keep it on a ' +
+        'company machine, do not email it, and delete it when you are finished.');
+});
+
+/* ------------------------------------------------------------ on load */
+
+(async () => {
+  const s = SESSION.get();
+  if (!s) return;
+  try { await start(s); } catch { SESSION.clear(); }
+})();
+</script>
+</body>
+</html>

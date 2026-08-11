@@ -27,10 +27,27 @@ Fonts are the only external dependency (Google Fonts CDN).
 
 ## Architecture
 
-All markup, CSS and JS live in `index.html`: `<style>` in the head, markup, then a ~20-line
-`<script>` at the bottom. Binary assets live in `assets/`. **No build step and no dependencies**
-is the requirement — do not introduce a bundler, framework, CSS file or npm dependency, and keep
-CSS and JS inline in the one file.
+Three HTML pages, each entirely self-contained — `<style>` in the head, markup, then a `<script>`
+at the bottom:
+
+| Page | What it is |
+|---|---|
+| `index.html` | The pitch site. Everything below describes this unless stated otherwise. |
+| `careers.html` | Public job application form. Added 2026-08-11. |
+| `admin.html` | HR dashboard for applications — Supabase Auth login, private document viewer. |
+
+Binary assets live in `assets/`. **No build step and no dependencies** is still the requirement —
+do not introduce a bundler, framework, CSS file or npm dependency, and keep each page's CSS and JS
+inline in that page. The careers pages talk to Supabase over plain `fetch`; there is deliberately
+no `supabase-js`, precisely so the rule holds.
+
+The one server-side thing in the repo is `supabase/` — a SQL schema and one Deno Edge Function.
+That is not part of the site build and never ships to the browser; it is deployed separately with
+the Supabase CLI. `CAREERS-SETUP.md` is the runbook and the threat model. Read it before touching
+anything under `supabase/`, and note the rule that governs all of it: **the browser holds no
+secret and enforces no authorisation.** Row-level security in Postgres is the boundary. Never
+"fix" a permissions problem by adding an RLS policy for `anon` on `applications` or by moving a
+key into a page.
 
 It was a single self-contained file until the client asked for photography; base64-embedding
 ~1.2MB of JPEG was worse than a folder, so `assets/` exists now. That is the only reason to add
@@ -71,8 +88,15 @@ IT services while keeping both inside the client's existing palette. Preserve it
 Layout is CSS grid with `auto-fit`/`minmax`, so cards reflow without per-breakpoint rules. The
 content box is 1080px (1180px `.wrap` minus 2×50px gutter) — worth knowing, because `minmax`
 minimums interact with it in ways that orphan the last card if you add one. `.grid.g4` pairs
-the four IT cards 2×2 for exactly that reason. The explicit breakpoints are 1020px (nav links
+the four IT cards 2×2 for exactly that reason. The explicit breakpoints are 1180px (nav links
 hide — note there is **no** mobile menu yet), 900px, 840px and 820px.
+
+That nav breakpoint is measured, not chosen: logo 202 + links 729 + button 109 + two 20px flex
+gaps = 1080, which is exactly the content box, so the header needs the full 1180. It was 1020,
+and the nav silently overlapped the logo between 1020 and ~1090 even before the seventh link
+(Careers) was added; both were fixed on 2026-08-11, along with `white-space:nowrap` on `.btn`,
+which had been breaking "Contact Us" across two lines at every width. If you add an eighth link
+something else has to give — the links are already at 12px horizontal padding.
 
 Headless Chrome clamps its viewport to a 500px minimum, so it cannot screenshot a 390px phone
 layout — a capture at `--window-size=390` renders at 500 and crops, which looks like an overflow
@@ -125,7 +149,7 @@ doesn't get relitigated from scratch:
 
 - There isn't content to fill it — no real photography, no client list (their own Customers page
   404s), no case study. Four thin pages read worse than one substantial one.
-- **There is no mobile menu.** `.nlinks` simply hides below 1020px. Survivable with anchor links
+- **There is no mobile menu.** `.nlinks` simply hides below 1180px. Survivable with anchor links
   on one page; a blocker for multi-page, which would have to build it first.
 - No build step means every page hand-duplicates the header and footer, and they drift. Fixing
   that properly means a static generator, which costs the "opens from disk, host anywhere"
@@ -133,6 +157,19 @@ doesn't get relitigated from scratch:
 
 Revisit once CDE approves the direction and supplies content. The split then mirrors their
 existing nav: Home / Products & Services / IT Services / Suppliers / Contact.
+
+**`careers.html` partially overtook this on 2026-08-11**, and both objections above now bite for
+real rather than hypothetically:
+
+- The **mobile menu is now a genuine gap, not a deferred nicety.** Below 1180px the header offers
+  no route to the careers page at all; the only link is in the footer. Job-seekers arrive on
+  phones. This should be built before the careers form is promoted anywhere.
+- The **header and footer are now duplicated across three files** and will drift. They were copied
+  from `index.html` on 2026-08-11 and are identical today. When you change one, change all three
+  — `.nlinks`, `.btn`, the brand lockup and the Nexvera credit are the parts that matter.
+
+Neither is a reason to add a build step. Both are reasons to expect the next structural change to
+cost more than this one did.
 
 ## Assets
 
@@ -160,6 +197,14 @@ page selling water treatment, blue-dominant hero to sit inside the gradient).
 The contact form is `mailto:`-only. `README.md` ("Before this goes live") lists the remaining
 content gaps — vector logo, year established, client names, supplier brands, real photography,
 an IT case study, CR number and ISO certifications.
+
+`careers.html` and `admin.html` each carry a `CFG` block at the top of their `<script>` holding
+`YOUR-PROJECT-REF` placeholders. Until those are filled in, neither page can reach a backend —
+the form will fail on submit and the dashboard will fail on sign-in. `CAREERS-SETUP.md` is the
+checklist. Two things there are decisions rather than steps and are deliberately left undone:
+Cloudflare Turnstile (the form works without it, unprotected) and the **data retention period**,
+which nobody should pick on CDE's behalf. Qatar's PDPPL applies — the form collects QID and
+passport images.
 
 One live claim still needs checking with CDE: *"an established Qatari company with premises in
 Doha and a client base across the country's largest industries"* in the "Why CDE" section.
