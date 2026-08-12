@@ -192,6 +192,29 @@ must be replaced with CDE's own photography before launch — README documents e
 source ID and the selection rules (no third-party branding visible, no emissions imagery on a
 page selling water treatment, blue-dominant hero to sit inside the gradient).
 
+Each of those five now has **`srcset` variants** alongside it (`hero-plant-800.jpg`,
+`hero-plant-1200.jpg`, and so on), added 2026-08-12. **Replacing a photograph means regenerating
+its variants**, or the page will serve the old picture to most phones. They were made with `sips`:
+
+```
+sips -Z <width> -s formatOptions <quality> <name>.jpg --out <name>-<width>.jpg
+```
+
+Quality is deliberately split by role. The three full-bleed `.ph` washes (hero-plant, it-network,
+doha) render at 13–30% opacity under gradients, so their variants are quality 65 at 800px and
+**50** at 1200px — verified by screenshot as indistinguishable. The two `.figure` photos
+(water-treatment, laboratory) are shown at full opacity with captions and stay at 72–78.
+
+Two things measured on 2026-08-12, so nobody repeats the experiment:
+
+- **Do not recompress the originals.** They are already efficiently encoded. Re-encoding at
+  quality 70 made every one of them *larger*; at 55 it saved about 5% for visible quality loss.
+- The saving is real but smaller than a naive calculation suggests, because high-DPR phones
+  legitimately need the big files. Mid-range phones (≈500px at 2x) drop from 1425 KB to 1006 KB
+  and the LCP image from 209 KB to 82 KB; a 3x phone and a retina desktop still fetch the
+  originals and save nothing. The remaining win is WebP/AVIF, which needs tooling this machine
+  does not have (`cwebp`/ImageMagick absent, and `sips` cannot write WebP here).
+
 ## Known placeholders
 
 The contact form is `mailto:`-only. `README.md` ("Before this goes live") lists the remaining

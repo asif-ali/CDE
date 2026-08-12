@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CDE — Chemical Dynamics Enterprises WLL | Doha, Qatar</title>
-<meta name="description" content="Renowned supplier of chemicals, laboratory equipment and online analyzers to Qatar's oil &amp; gas, power and process industries — and now IT services for businesses across Qatar.">
+<!-- 147 characters. Google truncates the snippet around 155-160, and the old
+     175-character version lost its tail ("...for businesses across Qatar")
+     in the results page — the IT offering, which is the whole pitch. -->
+<meta name="description" content="Renowned supplier of chemicals, laboratory equipment and online analyzers to Qatar's oil &amp; gas, power and process industries — and now IT services.">
 <meta property="og:title" content="CDE — Chemical Dynamics Enterprises WLL">
 <meta property="og:description" content="Renowned supplier of Chemicals, Laboratory Equipment &amp; Online Analyzers — and now IT services for businesses across Qatar.">
 <meta property="og:type" content="website">
@@ -13,6 +16,11 @@
      or link previews and canonicalisation will point at the wrong place. -->
 <meta property="og:url" content="https://chemicaldynamicsqatar.com/">
 <meta property="og:image" content="https://chemicaldynamicsqatar.com/assets/hero-plant.jpg">
+<!-- Dimensions let Facebook and LinkedIn reserve the card's space on first
+     scrape instead of rendering a thumbnail until they have fetched the file.
+     Must match hero-plant.jpg itself, not one of its srcset variants. -->
+<meta property="og:image:width" content="1800">
+<meta property="og:image:height" content="1202">
 <meta property="og:image:alt" content="Petrochemical plant at dusk">
 <meta property="og:site_name" content="CDE">
 <meta property="og:locale" content="en_GB">
@@ -20,6 +28,7 @@
 <meta name="twitter:title" content="CDE — Chemical Dynamics Enterprises WLL">
 <meta name="twitter:description" content="Renowned supplier of Chemicals, Laboratory Equipment &amp; Online Analyzers — and now IT services for businesses across Qatar.">
 <meta name="twitter:image" content="https://chemicaldynamicsqatar.com/assets/hero-plant.jpg">
+<meta name="twitter:image:alt" content="Petrochemical plant at dusk">
 <link rel="canonical" href="https://chemicaldynamicsqatar.com/">
 <meta name="robots" content="index,follow">
 <meta name="theme-color" content="#25AFB4">
@@ -346,7 +355,17 @@ footer a:hover{color:#8AD8DB}
 
 <!-- ============ HERO ============ -->
 <section class="hero">
-  <img class="ph" src="assets/hero-plant.jpg" alt="" aria-hidden="true" width="1800" height="1202">
+  <!-- Measured as the LCP element, so it gets fetchpriority: the browser
+       otherwise deprioritises it as a decorative image and the largest paint
+       waits on it anyway. The -800 and -1200 variants are quality 65 rather
+       than the figures' 78 — this sits at 30% opacity under two gradient
+       washes, where the difference is not visible. -->
+  <img class="ph" src="assets/hero-plant.jpg" alt="" aria-hidden="true" width="1800" height="1202"
+       fetchpriority="high"
+       sizes="100vw"
+       srcset="assets/hero-plant-800.jpg 800w,
+               assets/hero-plant-1200.jpg 1200w,
+               assets/hero-plant.jpg 1800w">
   <div class="wrap">
     <div class="heyebrow">CDE &nbsp;·&nbsp; Chemical Dynamics Enterprises WLL</div>
     <h1>Renowned supplier of Chemicals,<br>Laboratory Equipment &amp; Online Analyzers</h1>
@@ -396,7 +415,14 @@ footer a:hover{color:#8AD8DB}
       </div>
       <div>
       <div class="figure" style="height:230px;margin-bottom:22px">
-        <img src="assets/water-treatment.jpg" alt="Aerial view of clarifiers and filter beds at a water treatment plant" loading="lazy" width="1100" height="824">
+        <!-- 436px in the .about grid's right column (1.15fr/.85fr of the 1080
+             content box, less the 54px gap); full width below 900px. -->
+        <img src="assets/water-treatment.jpg" alt="Aerial view of clarifiers and filter beds at a water treatment plant" loading="lazy" width="1100" height="824"
+             sizes="(max-width:900px) 90vw, 436px"
+             srcset="assets/water-treatment-450.jpg 450w,
+                     assets/water-treatment-700.jpg 700w,
+                     assets/water-treatment-900.jpg 900w,
+                     assets/water-treatment.jpg 1100w">
         <div class="cap">Water and wastewater treatment — clarification, filtration and dosing</div>
       </div>
       <div class="facts">
@@ -422,7 +448,12 @@ footer a:hover{color:#8AD8DB}
     </div>
 
     <div class="figure" style="height:clamp(200px,26vw,320px);margin-bottom:34px">
-      <img src="assets/laboratory.jpg" alt="Analyst working at a laboratory bench with online analyzers and glassware" loading="lazy" width="1500" height="1001">
+      <!-- Full content width: 1080px capped, 90vw below the 1180px breakpoint. -->
+      <img src="assets/laboratory.jpg" alt="Analyst working at a laboratory bench with online analyzers and glassware" loading="lazy" width="1500" height="1001"
+           sizes="(max-width:1180px) 90vw, 1080px"
+           srcset="assets/laboratory-700.jpg 700w,
+                   assets/laboratory-1100.jpg 1100w,
+                   assets/laboratory.jpg 1500w">
       <div class="cap">Laboratory equipment, online analyzers and reagents — supplied, commissioned and supported</div>
     </div>
 
@@ -556,7 +587,11 @@ footer a:hover{color:#8AD8DB}
 
 <!-- ============ DIGITAL INTRO ============ -->
 <div class="newband" id="digital">
-  <img class="ph" src="assets/it-network.jpg" alt="" aria-hidden="true" loading="lazy" width="1500" height="842">
+  <img class="ph" src="assets/it-network.jpg" alt="" aria-hidden="true" loading="lazy" width="1500" height="842"
+       sizes="100vw"
+       srcset="assets/it-network-800.jpg 800w,
+               assets/it-network-1200.jpg 1200w,
+               assets/it-network.jpg 1500w">
   <div class="wrap">
     <div class="eyebrow">New from CDE</div>
     <h2>IT services for businesses across Qatar</h2>
@@ -819,7 +854,11 @@ footer a:hover{color:#8AD8DB}
 </main>
 
 <footer>
-  <img class="ph" src="assets/doha.jpg" alt="" aria-hidden="true" loading="lazy" width="1500" height="1000">
+  <img class="ph" src="assets/doha.jpg" alt="" aria-hidden="true" loading="lazy" width="1500" height="1000"
+       sizes="100vw"
+       srcset="assets/doha-800.jpg 800w,
+               assets/doha-1200.jpg 1200w,
+               assets/doha.jpg 1500w">
   <div class="wrap">
     <div class="frow">
       <div>

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- One URL, because there is one indexable page. careers.html is deliberately
+     absent: it is noindex (a bare application form with nothing to rank for),
+     and listing a noindex URL here only earns a Search Console warning.
+     admin.html is absent for the same reason and because nothing links to it.
+     Update lastmod when the page's content changes — not when a comment does. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://chemicaldynamicsqatar.com/</loc>
+    <lastmod>2026-08-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
