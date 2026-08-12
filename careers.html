@@ -684,9 +684,13 @@ form.addEventListener('submit', async e => {
       const kind = kinds[i];
       progress(10 + (i * 80 / kinds.length), 'Uploading ' + SPECS[kind].label.toLowerCase() + '…');
       const u = started.uploads[kind];
+      // u.url already carries ?token=… — Storage requires the token as a query
+      // parameter and rejects it as an Authorization header. Content-Type must
+      // be the real file type: the bucket enforces an allow-list and refuses
+      // the browser's default with "mime type … is not supported".
       const r = await fetch(u.url, {
         method: 'PUT',
-        headers: { authorization: 'Bearer ' + u.token, 'x-upsert': 'true' },
+        headers: { 'content-type': picks[kind].type, 'x-upsert': 'true' },
         body: picks[kind]
       });
       if (!r.ok) throw new Error('Upload of ' + SPECS[kind].label + ' failed.');

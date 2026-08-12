@@ -148,7 +148,11 @@ function storage(path: string, init: RequestInit = {}) {
     headers: {
       apikey: SERVICE_KEY,
       Authorization: `Bearer ${SERVICE_KEY}`,
-      "content-type": "application/json",
+      // Only when there is actually a body. Storage runs Fastify, which rejects
+      // a JSON content-type on an empty body with "Body cannot be empty" — and
+      // the signed-upload-URL call is a POST with no body. Setting this header
+      // unconditionally made every submission fail at the upload step.
+      ...(init.body ? { "content-type": "application/json" } : {}),
       ...(init.headers ?? {}),
     },
   });
@@ -292,19 +296,19 @@ async function start(
   const [created] = await ins.json();
 
   // ---- one signed upload URL per document, each bound to one exact path
-  const uploads: Record<string, { path: string; url: string; token: string }> = {};
+  const uploads: Record<string, { path: string; url: string }> = {};
   for (const kind of Object.keys(DOCS)) {
     const ext  = EXT[String(files[kind].type)] ?? "bin";
     const path = `${created.id}/${kind}.${ext}`;
     const r = await storage(`object/upload/sign/${BUCKET}/${path}`, { method: "POST" });
     if (!r.ok) throw new Error(`sign failed for ${kind}: ${r.status} ${await r.text()}`);
-    const signed = await r.json();          // { url: "/object/upload/sign/<bucket>/<path>?token=…" }
-    const token  = new URL(`https://x${signed.url}`).searchParams.get("token") ?? "";
-    uploads[kind] = {
-      path,
-      url: `${SUPABASE_URL}/storage/v1/object/upload/sign/${BUCKET}/${path}`,
-      token,
-    };
+    const signed = await r.json();   // { url: "/object/upload/sign/<bucket>/<path>?token=…" }
+
+    // Hand back the whole signed URL, token and all. Storage requires the token
+    // as a query parameter — an Authorization header is rejected with
+    // "querystring must have required property 'token'" — so returning the
+    // pieces separately just invites the caller to reassemble them wrongly.
+    uploads[kind] = { path, url: `${SUPABASE_URL}/storage/v1${signed.url}` };
   }
 
   return json({ id: created.id, upload_token: created.upload_token, uploads }, 200, origin);
