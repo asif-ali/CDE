@@ -89,7 +89,8 @@ Layout is CSS grid with `auto-fit`/`minmax`, so cards reflow without per-breakpo
 content box is 1080px (1180px `.wrap` minus 2×50px gutter) — worth knowing, because `minmax`
 minimums interact with it in ways that orphan the last card if you add one. `.grid.g4` pairs
 the four IT cards 2×2 for exactly that reason. The explicit breakpoints are 1180px (nav links
-hide — note there is **no** mobile menu yet), 900px, 840px and 820px.
+hide and the `.burger` takes over), 900px, 840px, 820px and 560px (the header
+`.btn` moves into the menu panel).
 
 That nav breakpoint is measured, not chosen: logo 202 + links 729 + button 109 + two 20px flex
 gaps = 1080, which is exactly the content box, so the header needs the full 1180. It was 1020,
@@ -149,8 +150,8 @@ doesn't get relitigated from scratch:
 
 - There isn't content to fill it — no real photography, no client list (their own Customers page
   404s), no case study. Four thin pages read worse than one substantial one.
-- **There is no mobile menu.** `.nlinks` simply hides below 1180px. Survivable with anchor links
-  on one page; a blocker for multi-page, which would have to build it first.
+- ~~There is no mobile menu.~~ Built on 2026-10-06 — `.burger` plus the `.mnav` panel. This
+  objection is now settled, and it was the one that actually blocked a multi-page split.
 - No build step means every page hand-duplicates the header and footer, and they drift. Fixing
   that properly means a static generator, which costs the "opens from disk, host anywhere"
   property that makes this easy to hand over.
@@ -161,9 +162,12 @@ existing nav: Home / Products & Services / IT Services / Suppliers / Contact.
 **`careers.html` partially overtook this on 2026-08-11**, and both objections above now bite for
 real rather than hypothetically:
 
-- The **mobile menu is now a genuine gap, not a deferred nicety.** Below 1180px the header offers
-  no route to the careers page at all; the only link is in the footer. Job-seekers arrive on
-  phones. This should be built before the careers form is promoted anywhere.
+- The **mobile menu was built on 2026-10-06**, before the site went live, because below 1180px
+  the header had offered no route to the careers page at all — only the footer did, and
+  job-seekers arrive on phones. `.mnav` mirrors `.nlinks` on each page and is toggled with the
+  `hidden` attribute, so the panel leaves the tab order and the accessibility tree when closed.
+  **The two link lists are maintained by hand: add a link to `.nlinks` and you must add it to
+  `.mnav` on the same page.** `admin.html` has no public header and so has no menu.
 - The **header and footer are now duplicated across three files** and will drift. They were copied
   from `index.html` on 2026-08-11 and are identical today. When you change one, change all three
   — `.nlinks`, `.btn`, the brand lockup and the Nexvera credit are the parts that matter.

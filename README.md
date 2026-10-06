@@ -340,7 +340,8 @@ CDE confirms.
   A bilingual site with `hreflang` is a genuine competitive gap, and the site already promises
   "Arabic and English throughout" in the Why CDE section — which is currently untrue of the site
   itself.
-- **No mobile menu.** Nav links just hide below 1020px. Reachable via footer links, but poor.
+- ~~No mobile menu.~~ Added 2026-10-06: a `.burger` toggle and a panel mirroring the nav.
+  (The 1020px figure here was already stale — the breakpoint moved to 1180px on 2026-08-11.)
 - **1.3MB of JPEG.** Converting to WebP would cut it roughly in half and improve LCP.
 - **No Google Business Profile link.** For "chemical supplier Doha" this matters more than
   on-page work; the structured data helps only if the profile exists and is claimed.

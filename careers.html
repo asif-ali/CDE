@@ -65,6 +65,37 @@ header{position:sticky;top:0;z-index:60;background:#fff;border-bottom:1px solid 
 .nlinks a.on{color:var(--teal)}
 /* Matches index.html — see the note there on why this is 1180 and not 1020 */
 @media(max-width:1180px){.nlinks{display:none}}
+
+/* ---------------- mobile menu ----------------
+   Added 2026-10-06. Below 1180px .nlinks hides, and until now nothing replaced
+   it — on a phone the careers page was reachable only from the footer. The
+   panel mirrors this page's .nlinks exactly: add a link to one, add it to the
+   other. Below 560px the header button moves into the panel, where brand +
+   button + burger stop fitting on one line. */
+.burger{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  width:44px;height:44px;padding:0;background:none;border:1px solid var(--line);
+  border-radius:var(--r);cursor:pointer}
+.burger span{display:block;width:20px;height:2px;background:var(--slate);border-radius:2px;
+  transition:transform .18s,opacity .18s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* No display rule on .mnav itself: the panel is toggled with the hidden
+   attribute, and an author display:block would beat the UA's
+   [hidden]{display:none} and leave it permanently open. */
+.mnav{border-top:1px solid var(--line);background:#fff;max-height:calc(100vh - 82px);
+  overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mnav .wrap{display:flex;flex-direction:column;padding-top:8px;padding-bottom:16px}
+.mnav a{font-size:16px;font-weight:500;color:var(--slate);padding:13px 6px;border-radius:var(--r)}
+.mnav a:hover{color:var(--teal)}
+.mnav a.on{color:var(--teal)}
+/* Two classes, so these beat `.mnav a` and the button keeps its own look. */
+.mnav .btn{margin-top:12px;padding:12px 24px;color:#fff;text-align:center}
+.mnav .btn:hover{color:#fff}
+@media(max-width:1180px){.burger{display:flex}.nav{justify-content:flex-start}
+  .brand{margin-right:auto}}
+@media(min-width:1181px){.mnav{display:none}}
+@media(max-width:560px){.nav>.btn{display:none}}
 .btn{display:inline-block;background:var(--slate);color:#fff;font-weight:500;font-size:15px;
   padding:12px 24px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--sans);
   letter-spacing:.4px;transition:background .15s;text-align:center;white-space:nowrap}
@@ -195,7 +226,21 @@ footer a:hover{color:#8AD8DB}
       <a href="index.html#contact">Contact</a>
     </nav>
     <a class="btn" href="index.html#contact">Contact Us</a>
+    <button class="burger" type="button" aria-label="Open menu"
+            aria-expanded="false" aria-controls="mnav">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+  <nav class="mnav" id="mnav" hidden>
+    <div class="wrap">
+      <a href="index.html#about">About CDE</a>
+      <a href="index.html#products">Products &amp; Services</a>
+      <a href="index.html#digital">IT Services</a>
+      <a href="careers.html" class="on">Careers</a>
+      <a href="index.html#contact">Contact</a>
+      <a class="btn" href="index.html#contact">Contact Us</a>
+    </div>
+  </nav>
 </header>
 
 <div class="phead">
@@ -725,6 +770,32 @@ async function post(body){
   if (!r.ok) throw new Error(out.error || 'Request failed.');
   return out;
 }
+
+/* Mobile menu, added 2026-10-06. The panel is toggled with the hidden
+   attribute rather than a class, so it leaves the accessibility tree and the
+   tab order when closed instead of being merely invisible. */
+(function(){
+  var b = document.querySelector('.burger'), p = document.getElementById('mnav');
+  if (!b || !p) return;
+  function set(open){
+    p.hidden = !open;
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    b.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  b.addEventListener('click', function(e){ e.stopPropagation(); set(p.hidden); });
+  p.addEventListener('click', function(e){ if (e.target.closest('a')) set(false); });
+  document.addEventListener('click', function(e){
+    if (!p.hidden && !p.contains(e.target) && !b.contains(e.target)) set(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !p.hidden){ set(false); b.focus(); }
+  });
+  /* Dragging a desktop window back over 1180 must not leave the panel open
+     with the burger gone. */
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 1180 && !p.hidden) set(false);
+  });
+})();
 </script>
 </body>
 </html>
