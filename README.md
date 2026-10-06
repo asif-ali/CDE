@@ -291,6 +291,8 @@ equipped, their team, their Doha premises.
 | Principal brand assets | Only 2 of 10 suppliers have logo files on their site; the rest will supply them free on request |
 | Supplier & principal brands | They have a Suppliers page; the brands they represent are a credibility asset worth showing |
 | **Real photography** | The five images on the page are stock placeholders — see above |
+| **Manpower imagery licence** | The six trade thumbnails came from the source document as temporary URLs, provenance unverified — confirm a licence or replace |
+| **A third brand colour** | Manpower borrows `--slate` because there was no third colour to sample; CDE should supply one |
 | IT case study | Even one before/after would de-risk the new offering enormously |
 | CR number and any ISO certifications | Standard trust signals for Qatari industrial procurement |
 

@@ -33,6 +33,7 @@ at the bottom:
 | Page | What it is |
 |---|---|
 | `index.html` | The pitch site. Everything below describes this unless stated otherwise. |
+| `manpower.html` | Manpower Supply Division. Added 2026-10-06. |
 | `careers.html` | Public job application form. Added 2026-08-11. |
 | `admin.html` | HR dashboard for applications — Supabase Auth login, private document viewer. |
 
@@ -85,6 +86,12 @@ A trailing `.b` modifier switches a component from teal to blue — `.c.b`, `.sh
 That teal/blue split is load-bearing: it visually separates the chemicals catalogue from the new
 IT services while keeping both inside the client's existing palette. Preserve it.
 
+`.s` is the third of these, added 2026-10-06 for the manpower division, and it uses `--slate`.
+It is slate because the palette rule forbids inventing a colour and there was no third one to
+sample — not because slate was chosen for manpower. **A real third brand colour is a client
+decision still outstanding**; when it arrives it replaces five declarations at the top of
+`manpower.html` and nothing else.
+
 Layout is CSS grid with `auto-fit`/`minmax`, so cards reflow without per-breakpoint rules. The
 content box is 1080px (1180px `.wrap` minus 2×50px gutter) — worth knowing, because `minmax`
 minimums interact with it in ways that orphan the last card if you add one. `.grid.g4` pairs
@@ -96,8 +103,14 @@ That nav breakpoint is measured, not chosen: logo 202 + links 729 + button 109 +
 gaps = 1080, which is exactly the content box, so the header needs the full 1180. It was 1020,
 and the nav silently overlapped the logo between 1020 and ~1090 even before the seventh link
 (Careers) was added; both were fixed on 2026-08-11, along with `white-space:nowrap` on `.btn`,
-which had been breaking "Contact Us" across two lines at every width. If you add an eighth link
-something else has to give — the links are already at 12px horizontal padding.
+which had been breaking "Contact Us" across two lines at every width.
+
+The eighth link (Manpower) arrived on 2026-10-06 and something did have to give: **the header
+`Contact Us` button was removed** on all three public pages. Shortening "Products & Services" to
+"Products" would also have fitted, and was rejected — that name is fixed "throughout" by the
+naming rule above, and a nav that disagrees with the section it points at is worse than a missing
+button. The button survives inside the `.mnav` panel, and `Contact` remains a nav link. A ninth
+link has no room left at all without dropping a label.
 
 Headless Chrome clamps its viewport to a 500px minimum, so it cannot screenshot a 390px phone
 layout — a capture at `--window-size=390` renders at 500 and crops, which looks like an overflow
@@ -168,9 +181,12 @@ real rather than hypothetically:
   `hidden` attribute, so the panel leaves the tab order and the accessibility tree when closed.
   **The two link lists are maintained by hand: add a link to `.nlinks` and you must add it to
   `.mnav` on the same page.** `admin.html` has no public header and so has no menu.
-- The **header and footer are now duplicated across three files** and will drift. They were copied
-  from `index.html` on 2026-08-11 and are identical today. When you change one, change all three
-  — `.nlinks`, `.btn`, the brand lockup and the Nexvera credit are the parts that matter.
+- The **header is now duplicated across three files and the footer across two**, and they will
+  drift. `index.html`, `careers.html` and `manpower.html` each carry their own header; the
+  four-column footer is in `index.html` and `manpower.html`, while `careers.html` has a cut-down
+  one with no columns. When you change one, change the others — `.nlinks`, `.mnav`, the brand
+  lockup and the Nexvera credit are the parts that matter. The nav link lists already differ by
+  design (`careers.html` omits Suppliers and Why CDE), so diffing them blindly will mislead.
 
 Neither is a reason to add a build step. Both are reasons to expect the next structural change to
 cost more than this one did.
@@ -180,6 +196,16 @@ cost more than this one did.
 `assets/cde-emblem.png` is the client's genuine logo mark, taken from their own server; the
 `-white` variant is the same file recoloured for the dark footer. Both are real brand assets —
 don't substitute a drawn approximation. Only web PNGs exist; the vector original is still to come.
+
+`assets/manpower/` holds six 176px square thumbnails, shown at 64px, for the trade cards —
+same convention as `assets/products/`. **Their provenance is not verified.** They were supplied
+as temporary generated URLs in `manpower division.txt`, and on inspection the set is mixed: two
+look AI-generated (one is a 1024×1024 square), four look like commercial stock photography, and
+two of those show timber-frame construction, which is a North American or European building
+method rather than a Qatari one. They are cropped to thumbnails partly for that reason. **Before
+launch, confirm CDE actually holds a licence for these, or replace them** — the five large
+photographs are Unsplash-licensed and documented precisely because that mattered. The
+full-resolution downloads were kept outside the repo, on the Desktop in `cde-manpower-images/`.
 
 `assets/products/` holds 64px card thumbnails cropped from **CDE's own catalogue images**, taken
 from their live Products page. Those sources are 187–458px, which is why they appear only at

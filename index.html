@@ -340,6 +340,12 @@ input,select,textarea{width:100%;background:#fff;border:1px solid var(--line);
   color:var(--ink);font:inherit;font-size:15.5px;padding:11px 13px;border-radius:var(--r)}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-color:transparent}
 form .btn{margin-top:22px;width:100%}
+/* Submission feedback for the contact form. */
+.fstat{display:none;margin-top:14px;font-size:14.5px;line-height:1.5;
+  padding:11px 13px;border-radius:var(--r);border:1px solid}
+.fstat.on{display:block}
+.fstat.ok{background:var(--teal-soft);border-color:#B9E4E5;color:#17706F}
+.fstat.err{background:#FDECEC;border-color:#F4C9C9;color:#A23B3B}
 .fnote{font-size:12.5px;margin-top:12px;text-align:center}
 
 /* ---------------- footer ---------------- */
@@ -347,7 +353,11 @@ footer{background:var(--slate);color:rgba(255,255,255,.72);padding:52px 0 26px;f
   position:relative;overflow:hidden}
 footer .ph{opacity:.13;z-index:0}
 footer .wrap{position:relative;z-index:1}
-.frow{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px;padding-bottom:32px}
+/* Four columns since the manpower division joined on 2026-10-06. The brand
+   column keeps the larger share; two breakpoints rather than one, because four
+   columns go narrow well before the single-column stack makes sense. */
+.frow{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:34px;padding-bottom:32px}
+@media(max-width:1020px){.frow{grid-template-columns:1fr 1fr;gap:30px}}
 @media(max-width:820px){.frow{grid-template-columns:1fr;gap:26px}}
 footer h3{color:#fff;font-size:13px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:14px}
 footer ul{list-style:none}
@@ -374,11 +384,11 @@ footer a:hover{color:#8AD8DB}
       <a href="#products">Products &amp; Services</a>
       <a href="#suppliers">Suppliers</a>
       <a href="#digital">IT Services</a>
+      <a href="manpower.html">Manpower</a>
       <a href="#why">Why CDE</a>
       <a href="careers.html">Careers</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="btn" href="#contact">Contact Us</a>
     <button class="burger" type="button" aria-label="Open menu"
             aria-expanded="false" aria-controls="mnav">
       <span></span><span></span><span></span>
@@ -390,6 +400,7 @@ footer a:hover{color:#8AD8DB}
       <a href="#products">Products &amp; Services</a>
       <a href="#suppliers">Suppliers</a>
       <a href="#digital">IT Services</a>
+      <a href="manpower.html">Manpower</a>
       <a href="#why">Why CDE</a>
       <a href="careers.html">Careers</a>
       <a href="#contact">Contact</a>
@@ -856,6 +867,9 @@ footer a:hover{color:#8AD8DB}
           <div class="v">First Floor, Doha Souq Mall<br>Al Mirqab Al Jadeed St, PO Box 55015<br>Doha, Qatar</div></div>
         <div class="row"><div class="k">Phone</div>
           <a class="v" href="tel:+97470141198" dir="ltr">+974 7014 1198</a></div>
+        <div class="row"><div class="k">Manpower</div>
+          <div class="v"><a href="tel:+97431104078" dir="ltr">+974 3110 4078</a><br>
+            <a href="tel:+97431071277" dir="ltr">+974 3107 1277</a></div></div>
         <div class="row"><div class="k">Email</div>
           <a class="v" href="mailto:info@chemicaldynamicsqatar.com">info@chemicaldynamicsqatar.com</a></div>
       </div>
@@ -891,8 +905,11 @@ footer a:hover{color:#8AD8DB}
           <option>Something else</option>
         </select>
         <label for="ms">Message</label>
-        <textarea id="ms" name="message" rows="4"></textarea>
+        <textarea id="ms" name="message" rows="4" required></textarea>
         <button class="btn t" type="submit">Send Enquiry</button>
+        <!-- role=status + aria-live: the result is announced without stealing
+             focus from the form. -->
+        <p class="fstat" id="fstat" role="status" aria-live="polite"></p>
         <p class="fnote">We aim to respond within one working day.</p>
       </form>
     </div>
@@ -939,6 +956,17 @@ footer a:hover{color:#8AD8DB}
           <li><a href="#contact">Contact us</a></li>
         </ul>
       </div>
+      <div>
+        <h3>Manpower</h3>
+        <ul>
+          <li><a href="manpower.html">Electricians</a></li>
+          <li><a href="manpower.html">Plumbers</a></li>
+          <li><a href="manpower.html">Carpenters</a></li>
+          <li><a href="manpower.html">Scaffolders</a></li>
+          <li><a href="manpower.html">Civil workers &amp; supervisors</a></li>
+          <li><a href="manpower.html#request">Request manpower</a></li>
+        </ul>
+      </div>
     </div>
     <div class="fbase">
       <div>© <span id="yr">2026</span> Chemical Dynamics Enterprises WLL · All rights reserved
@@ -957,21 +985,62 @@ footer a:hover{color:#8AD8DB}
 <script>
 document.getElementById('yr').textContent = new Date().getFullYear();
 
-function sendEnquiry(e){
+/* Contact form. Was a `mailto:` until 2026-10-06: on a phone with no mail
+   client configured that opens nothing, the visitor sees the page sit there,
+   and the enquiry is simply lost. It now posts to the submit-enquiry Edge
+   Function, which is the only thing that can write to the enquiries table.
+
+   No key here, deliberately — the function is deployed --no-verify-jwt and
+   authorisation is row-level security in Postgres, exactly as for careers. */
+const ENQUIRY_ENDPOINT =
+  'https://jxfoxtwgadmjaeiwgauo.supabase.co/functions/v1/submit-enquiry';
+
+async function sendEnquiry(e){
   e.preventDefault();
-  const f = e.target, g = n => (f[n].value || '').trim();
-  const body = [
-    'Name: '    + g('name'),
-    'Company: ' + g('company'),
-    'Email: '   + g('email'),
-    'Phone: '   + g('phone'),
-    'Enquiry: ' + g('division'),
-    '',
-    g('message')
-  ].join('\n');
-  window.location.href = 'mailto:info@chemicaldynamicsqatar.com'
-    + '?subject=' + encodeURIComponent('Website enquiry — ' + (g('division') || 'General'))
-    + '&body='    + encodeURIComponent(body);
+  const f   = e.target;
+  const btn = f.querySelector('button[type="submit"]');
+  const out = document.getElementById('fstat');
+  /* f.elements[n], never f[n]: a form's own `name` property shadows the
+     control called "name", so the old f['name'].value was always undefined
+     and every mailto went out with an empty Name line. */
+  const g   = n => ((f.elements[n] && f.elements[n].value) || '').trim();
+  const say = (msg, kind) => { out.textContent = msg; out.className = 'fstat on ' + kind; };
+
+  const label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sending\u2026';
+  out.textContent = ''; out.className = 'fstat';
+
+  try {
+    const r = await fetch(ENQUIRY_ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        name:     g('name'),
+        company:  g('company'),
+        email:    g('email'),
+        phone:    g('phone'),
+        division: g('division'),
+        message:  g('message'),
+        turnstile: g('cf-turnstile-response')
+      })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (r.ok && d.ok) {
+      f.reset();
+      say('Thank you \u2014 your enquiry has reached us. We aim to respond within one working day.', 'ok');
+    } else {
+      say(d.error || 'We could not send that. Please email info@chemicaldynamicsqatar.com.', 'err');
+    }
+  } catch (err) {
+    /* Offline, DNS, an extension blocking the request — anything that never
+       reached the function. Give them the address rather than a dead end. */
+    say('We could not reach our servers. Please check your connection, or email info@chemicaldynamicsqatar.com.', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+    if (window.turnstile) window.turnstile.reset();
+  }
   return false;
 }
 
