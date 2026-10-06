@@ -270,3 +270,88 @@ $$;
 -- then schedule a deletion that removes the storage objects as well as the
 -- rows — dropping the row alone orphans four files in the bucket forever.
 -- Left unscheduled on purpose: nobody should silently pick that number.
+
+
+-- ---------------------------------------------------------------------
+--  6. Enquiries
+-- ---------------------------------------------------------------------
+-- The contact form on index.html. Added 2026-10-06, replacing a `mailto:`
+-- link that did nothing at all for any visitor without a desktop mail client
+-- configured — which, on a phone, is most of them. Every enquiry sent through
+-- that form before this date was lost silently, with the visitor believing it
+-- had been sent.
+--
+-- Same shape as applications, for the same reasons: the browser writes
+-- nothing directly, there is no `to anon` policy, and the only door is the
+-- submit-enquiry Edge Function running as the service role.
+--
+-- Much less sensitive than an application — a name, a company and a message,
+-- no identity documents — but still personal data under PDPPL, so it still
+-- gets RLS, an IP hash rather than an IP, and a retention note.
+
+create table if not exists public.enquiries (
+  id         uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+
+  status text not null default 'new'
+    check (status in ('new','in_progress','answered','spam','closed')),
+
+  name     text not null,
+  company  text,
+  email    text not null,
+  phone    text,
+
+  -- Which side of the business the enquiry is for; mirrors the form's select.
+  -- Deliberately free text and not a check constraint: adding an option to the
+  -- page should not require a migration to go with it.
+  division text,
+
+  message  text not null,
+
+  -- Truncated SHA-256 of (IP + server-side salt), as on applications. Enough
+  -- to rate-limit and to spot a flood; not a stored identifier of a person.
+  submitted_ip_hash text,
+
+  admin_notes text,
+  reviewed_by uuid references auth.users(id),
+  reviewed_at timestamptz
+);
+
+create index if not exists enquiries_created_idx on public.enquiries (created_at desc);
+create index if not exists enquiries_status_idx  on public.enquiries (status);
+create index if not exists enquiries_iphash_idx  on public.enquiries (submitted_ip_hash, created_at desc);
+
+alter table public.enquiries enable row level security;
+
+-- As with applications: the absence of any `to anon` policy IS the boundary
+-- for the public form. Do not add one.
+
+drop policy if exists "admins read enquiries" on public.enquiries;
+create policy "admins read enquiries"
+  on public.enquiries for select
+  to authenticated
+  using (public.is_admin());
+
+drop policy if exists "admins update enquiries" on public.enquiries;
+create policy "admins update enquiries"
+  on public.enquiries for update
+  to authenticated
+  using (public.is_admin())
+  with check (public.is_admin());
+
+-- Narrowed to the workflow columns, so an admin cannot rewrite what the
+-- enquirer actually said. The dashboard would never try; the grant is what
+-- makes it impossible.
+revoke update on public.enquiries from authenticated;
+grant  update (status, admin_notes, reviewed_by, reviewed_at)
+  on public.enquiries to authenticated;
+
+-- No audit trigger here, unlike applications. That trail exists because PDPPL
+-- expects you to say who opened a candidate's passport scan; a sales enquiry
+-- carries nothing of that weight. Add one if enquiries ever start carrying
+-- commercially sensitive detail.
+
+-- RETENTION, as for applications: agree a period with CDE rather than keeping
+-- these forever. Enquiries have no attached storage objects, so deletion here
+-- really is just the rows:
+--   delete from public.enquiries where created_at < now() - interval '24 months';
