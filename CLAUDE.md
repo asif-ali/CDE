@@ -35,7 +35,7 @@ at the bottom:
 | `index.html` | The pitch site. Everything below describes this unless stated otherwise. |
 | `manpower.html` | Manpower Supply Division. Added 2026-10-06. |
 | `careers.html` | Public job application form. Added 2026-08-11. |
-| `admin.html` | HR dashboard for applications — Supabase Auth login, private document viewer. |
+| `admin.html` | HR dashboard — applications and enquiries, Supabase Auth login, private document viewer. |
 
 Binary assets live in `assets/`. **No build step and no dependencies** is still the requirement —
 do not introduce a bundler, framework, CSS file or npm dependency, and keep each page's CSS and JS
@@ -59,9 +59,16 @@ Structure, top to bottom: sticky header → hero → industries strip → About 
 in-page anchors (`#about`, `#products`, `#digital`, `#why`, `#contact`); `scroll-padding-top`
 compensates for the sticky header.
 
-The only JavaScript: the footer year, and `sendEnquiry()`, which builds a `mailto:` to
-`info@chemicaldynamicsqatar.com` from the contact form. This is placeholder behaviour — a real
-form handler is needed before launch.
+The only JavaScript: the footer year, the mobile menu, and `sendEnquiry()`, which posts the
+contact form to the `submit-enquiry` Edge Function. It was a `mailto:` until 2026-10-06, which
+did nothing visible on a phone with no mail client — every enquiry sent through it was lost
+silently. `manpower.html` carries the same handler, differing only in that it prefixes `division`
+with "Manpower —".
+
+Enquiries land in the `enquiries` table and are read in `admin.html`'s **Enquiries** tab.
+**There is no email notification, by decision** — that tab is the only place an enquiry surfaces,
+which is why it carries an unread count. Adding notification means a database webhook into Resend
+or SendGrid, the same unfinished item as for applications in `CAREERS-SETUP.md`.
 
 ### CSS conventions
 
@@ -185,8 +192,10 @@ real rather than hypothetically:
   drift. `index.html`, `careers.html` and `manpower.html` each carry their own header; the
   four-column footer is in `index.html` and `manpower.html`, while `careers.html` has a cut-down
   one with no columns. When you change one, change the others — `.nlinks`, `.mnav`, the brand
-  lockup and the Nexvera credit are the parts that matter. The nav link lists already differ by
-  design (`careers.html` omits Suppliers and Why CDE), so diffing them blindly will mislead.
+  lockup and the Nexvera credit are the parts that matter. **All three nav link lists are now
+  identical**, eight links in the same order; `careers.html` used to omit Suppliers and Why CDE
+  and that was corrected on 2026-10-06, so a diff between the three headers should come back
+  clean apart from the `.on` marker and whether the hrefs are in-page or `index.html#`-prefixed.
 
 Neither is a reason to add a build step. Both are reasons to expect the next structural change to
 cost more than this one did.

@@ -112,6 +112,31 @@ td .sub{font-size:12.5px;color:var(--grey)}
 .p-interviewed{background:var(--amber-soft);color:var(--amber)}
 .p-hired{background:var(--green-soft);color:var(--green)}
 .p-rejected{background:var(--bg2);color:var(--grey)}
+/* Enquiry statuses. `new` is shared with applications deliberately — it means
+   the same thing in both tables and should look the same. */
+.p-in_progress{background:var(--blue-soft);color:var(--blue)}
+.p-answered{background:var(--green-soft);color:var(--green)}
+.p-closed{background:var(--bg2);color:var(--grey)}
+.p-spam{background:var(--red-soft);color:var(--red)}
+
+/* ---------------- tabs ----------------
+   Enquiries live beside applicants rather than on their own page: HR is
+   already signed in here, and with notifications deliberately left out the
+   dashboard is the only place a contact enquiry surfaces at all. */
+.tabs{display:flex;gap:6px}
+.tab{background:transparent;border:1px solid transparent;color:rgba(255,255,255,.72);
+  font-family:var(--sans);font-size:14px;padding:8px 14px;border-radius:var(--r);
+  cursor:pointer;white-space:nowrap}
+.tab:hover{background:rgba(255,255,255,.1);color:#fff}
+.tab.on{background:rgba(255,255,255,.16);color:#fff}
+.cnt{display:inline-block;margin-left:7px;background:var(--teal);color:#fff;font-size:11px;
+  line-height:1.65;min-width:18px;padding:0 6px;border-radius:99px;text-align:center}
+.cnt:empty{display:none}
+/* The message is the whole point of an enquiry record, so it keeps the line
+   breaks the sender typed rather than collapsing into a paragraph. */
+.msg{white-space:pre-wrap;line-height:1.65;background:var(--bg2);border:1px solid var(--line);
+  border-radius:var(--r);padding:14px 15px;font-size:15px;color:var(--ink)}
+@media(max-width:760px){.top .in{height:auto;padding:12px 16px;flex-wrap:wrap;gap:12px}}
 .empty{padding:56px 24px;text-align:center}
 .empty b{display:block;font-family:var(--slab);color:var(--slate);font-size:17px;margin-bottom:6px}
 
@@ -196,14 +221,21 @@ td .sub{font-size:12.5px;color:var(--grey)}
     <div class="in">
       <div class="who">
         <img src="assets/cde-emblem-white.png" alt="" width="34" height="34">
-        <span><b>Applicants</b></span>
+        <span><b>CDE</b></span>
         <span id="whoEmail"></span>
       </div>
+      <nav class="tabs" role="tablist" aria-label="Dashboard sections">
+        <button class="tab on" id="tabApps" type="button" role="tab"
+                aria-selected="true" aria-controls="panelApps">Applicants<span class="cnt" id="cApps"></span></button>
+        <button class="tab" id="tabEnq" type="button" role="tab"
+                aria-selected="false" aria-controls="panelEnq">Enquiries<span class="cnt" id="cEnq"></span></button>
+      </nav>
       <button class="out" id="signOut" type="button">Sign out</button>
     </div>
   </div>
 
   <div class="shell">
+    <div id="panelApps" role="tabpanel" aria-labelledby="tabApps">
     <div class="stats" id="stats"></div>
 
     <div class="bar">
@@ -243,6 +275,50 @@ td .sub{font-size:12.5px;color:var(--grey)}
       <div class="empty" id="empty" hidden>
         <b>No applications yet</b>
         <span id="emptyWhy">Submissions from the careers form will appear here.</span>
+      </div>
+    </div>
+    </div><!-- /#panelApps -->
+
+    <div id="panelEnq" role="tabpanel" aria-labelledby="tabEnq" hidden>
+      <div class="stats" id="eStats"></div>
+
+      <div class="bar">
+        <div class="search">
+          <input id="eq" type="search" placeholder="Search name, company, email or message…" aria-label="Search enquiries">
+        </div>
+        <select id="eStatus" aria-label="Filter enquiries by status">
+          <option value="">All statuses</option>
+          <option value="new">New</option>
+          <option value="in_progress">In progress</option>
+          <option value="answered">Answered</option>
+          <option value="closed">Closed</option>
+          <option value="spam">Spam</option>
+        </select>
+        <select id="eSort" aria-label="Sort enquiries">
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+          <option value="name">Name A–Z</option>
+        </select>
+        <span class="sp"></span>
+        <button class="btn ghost" id="eRefresh" type="button">Refresh</button>
+        <button class="btn ghost" id="eCsv" type="button">Export CSV</button>
+      </div>
+
+      <div class="tbl">
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Received</th><th>From</th><th>Interest</th><th>Phone</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="eRows"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="eEmpty" hidden>
+          <b>No enquiries yet</b>
+          <span id="eEmptyWhy">Messages from the contact and manpower forms will appear here.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -381,7 +457,7 @@ async function start(session){
   el('gate').hidden = true;
   el('app').hidden  = false;
   el('whoEmail').textContent = session.user?.email || '';
-  await load();
+  await Promise.all([load(), loadEnquiries()]);
 }
 
 el('signOut').addEventListener('click', () => {
@@ -487,6 +563,15 @@ const fmtDate = s => s
 const fmtWhen = s => s ? new Date(s).toLocaleString('en-GB',
   { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
 const titled  = s => (s||'').charAt(0).toUpperCase() + (s||'').slice(1);
+
+/* Shared by both CSV exporters. Excel executes a cell beginning =, +, - or @,
+   so an applicant or enquirer who names themselves =HYPERLINK(...) must not
+   get to run anything on an HR laptop. */
+const csvCell = v => {
+  let t = v == null ? '' : String(v);
+  if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
+  return '"' + t.replace(/"/g, '""') + '"';
+};
 
 function draw(){
   const list = visible();
@@ -697,16 +782,8 @@ el('csv').addEventListener('click', () => {
     'current_employer','previous_employers','highest_qualification','driving_license',
     'available_from','notes','admin_notes'];
 
-  const cell = v => {
-    let s = v == null ? '' : String(v);
-    // Excel executes a cell beginning =, +, - or @. An applicant who names
-    // themselves =HYPERLINK(...) should not get to run anything on an HR laptop.
-    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
-    return '"' + s.replace(/"/g, '""') + '"';
-  };
-
   const csv = '﻿' + [cols.join(',')]
-    .concat(visible().map(a => cols.map(c => cell(a[c])).join(',')))
+    .concat(visible().map(a => cols.map(c => csvCell(a[c])).join(',')))
     .join('\r\n');
 
   const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' }));
@@ -722,6 +799,233 @@ el('csv').addEventListener('click', () => {
         'This file contains personal data — QID and passport numbers. Keep it on a ' +
         'company machine, do not email it, and delete it when you are finished.');
 });
+
+/* ------------------------------------------------------------- enquiries */
+/* The contact form on index.html and the request form on manpower.html both
+   write here. There is no email notification by decision, so this tab is the
+   only place an enquiry surfaces — which is why the tab carries an unread
+   count rather than making someone open it to find out. */
+
+let ENQ = [];
+const ENQ_FIELDS = 'id,created_at,status,name,company,email,phone,division,message,' +
+                   'admin_notes,reviewed_at';
+const ESTATUS = { new:'New', in_progress:'In progress', answered:'Answered',
+                  closed:'Closed', spam:'Spam' };
+const eLabel = v => ESTATUS[v] || titled(v);
+
+async function loadEnquiries(){
+  try {
+    ENQ = await api('enquiries?select=' + ENQ_FIELDS + '&order=created_at.desc&limit=1000');
+    drawEnq();
+  } catch (ex){
+    if (ex.message === 'Signed out') return;
+    /* Most likely cause is schema.sql not having been re-run on this project,
+       so `enquiries` does not exist yet. Report it inside the panel rather
+       than firing an alert over the applicants table someone is reading. */
+    ENQ = [];
+    drawEnq('Could not load enquiries (' + ex.message + '). If this project has ' +
+            'not had supabase/schema.sql run since the enquiries table was added, ' +
+            'run it now.');
+  }
+}
+
+function visibleEnq(){
+  const q  = el('eq').value.trim().toLowerCase();
+  const st = el('eStatus').value;
+  let list = ENQ.filter(e => {
+    if (st && e.status !== st) return false;
+    if (!q) return true;
+    return [e.name, e.company, e.email, e.phone, e.division, e.message]
+      .filter(Boolean).join(' ').toLowerCase().includes(q);
+  });
+  const by = el('eSort').value;
+  if (by === 'old')  list = list.slice().reverse();
+  if (by === 'name') list = list.slice().sort((a, b) =>
+    (a.name || '').localeCompare(b.name || ''));
+  return list;
+}
+
+function drawEnq(errMsg){
+  const list = visibleEnq();
+  const tb = el('eRows');
+  tb.textContent = '';
+
+  const counts = { total: ENQ.length, new:0, in_progress:0, answered:0, closed:0 };
+  ENQ.forEach(e => { if (e.status in counts) counts[e.status]++; });
+
+  /* The badge counts what is actually waiting on someone, not the total. */
+  el('cEnq').textContent = counts.new ? String(counts.new) : '';
+
+  const stats = el('eStats');
+  stats.textContent = '';
+  [['Total', counts.total, false], ['New', counts.new, true],
+   ['In progress', counts.in_progress, false], ['Answered', counts.answered, false],
+   ['Closed', counts.closed, false]].forEach(([k, n, hi]) => {
+    const d = document.createElement('div');
+    d.className = 'stat' + (hi && n ? ' hi' : '');
+    const a = document.createElement('div'); a.className = 'n'; a.textContent = n;
+    const b = document.createElement('div'); b.className = 'k'; b.textContent = k;
+    d.append(a, b);
+    stats.appendChild(d);
+  });
+
+  el('eEmpty').hidden = list.length > 0;
+  el('eEmptyWhy').textContent = errMsg ? errMsg
+    : (ENQ.length ? 'No enquiries match the current filters.'
+                  : 'Messages from the contact and manpower forms will appear here.');
+
+  /* textContent everywhere, as in the applicants table: the name, company and
+     message are all attacker-controlled, and one innerHTML here would run a
+     submitted <script> inside an authenticated HR session. */
+  list.forEach(e => {
+    const tr = document.createElement('tr');
+    tr.tabIndex = 0;
+    tr.addEventListener('click', () => openEnquiry(e));
+    tr.addEventListener('keydown', ev => { if (ev.key === 'Enter') openEnquiry(e); });
+
+    const td = (build) => { const c = document.createElement('td'); build(c); tr.appendChild(c); };
+
+    td(c => { c.textContent = fmtDate(e.created_at); });
+    td(c => {
+      const n = document.createElement('div'); n.className = 'nm'; n.textContent = e.name || '—';
+      const x = document.createElement('div'); x.className = 'sub';
+      x.textContent = [e.company, e.email].filter(Boolean).join(' · ');
+      c.append(n, x);
+    });
+    td(c => { c.textContent = e.division || '—'; });
+    td(c => { c.textContent = e.phone || '—'; c.dir = 'ltr'; });
+    td(c => {
+      const pill = document.createElement('span');
+      pill.className = 'pill p-' + e.status;
+      pill.textContent = eLabel(e.status);
+      c.appendChild(pill);
+    });
+
+    tb.appendChild(tr);
+  });
+}
+
+function openEnquiry(e){
+  el('dName').textContent = e.name || '—';
+  el('dSub').textContent  = [e.company, 'received ' + fmtWhen(e.created_at)]
+    .filter(Boolean).join(' · ');
+
+  const body = el('dBody');
+  body.textContent = '';
+
+  const h = document.createElement('div'); h.className = 'grp'; h.textContent = 'Enquiry';
+  const dl = document.createElement('dl'); dl.className = 'kv';
+  const pair = (k, v, href) => {
+    if (v == null || v === '') return;
+    const dt = document.createElement('dt'); dt.textContent = k;
+    const dd = document.createElement('dd');
+    if (href){
+      const a = document.createElement('a');
+      a.href = href; a.textContent = v; a.dir = 'ltr';
+      dd.appendChild(a);
+    } else dd.textContent = v;
+    dl.append(dt, dd);
+  };
+  pair('Company',  e.company);
+  pair('Email',    e.email, e.email ? 'mailto:' + e.email : null);
+  pair('Phone',    e.phone, e.phone ? 'tel:' + e.phone.replace(/[^\d+]/g, '') : null);
+  pair('Interest', e.division);
+  body.append(h, dl);
+
+  const mh = document.createElement('div'); mh.className = 'grp'; mh.textContent = 'Message';
+  const msg = document.createElement('div'); msg.className = 'msg';
+  msg.textContent = e.message || '—';
+  body.append(mh, msg);
+
+  /* ---- workflow ---- */
+  const wh = document.createElement('div'); wh.className = 'grp'; wh.textContent = 'Review';
+  const wf = document.createElement('div'); wf.className = 'wf';
+
+  const row = document.createElement('div'); row.className = 'row';
+  const sWrap = document.createElement('div');
+  const sLab = document.createElement('label'); sLab.textContent = 'Status';
+  const sel = document.createElement('select');
+  Object.keys(ESTATUS).forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = ESTATUS[v];
+    if (e.status === v) o.selected = true;
+    sel.appendChild(o);
+  });
+  sWrap.append(sLab, sel);
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'btn t'; saveBtn.type = 'button'; saveBtn.textContent = 'Save';
+  row.append(sWrap, saveBtn);
+
+  const nLab = document.createElement('label');
+  nLab.textContent = 'Internal notes'; nLab.style.marginTop = '14px';
+  const notes = document.createElement('textarea');
+  notes.rows = 3; notes.value = e.admin_notes || '';
+  notes.placeholder = 'Visible to CDE only';
+
+  const ok = document.createElement('div'); ok.className = 'saved'; ok.textContent = 'Saved';
+
+  saveBtn.addEventListener('click', async () => {
+    saveBtn.disabled = true; ok.classList.remove('on');
+    try {
+      const sess = SESSION.get();
+      /* Only these four columns are granted to `authenticated`, so the request
+         cannot rewrite what the enquirer actually said even if it tried. */
+      await request('/rest/v1/enquiries?id=eq.' + e.id, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          status: sel.value,
+          admin_notes: notes.value.trim() || null,
+          reviewed_by: sess.user?.id || null,
+          reviewed_at: new Date().toISOString()
+        })
+      });
+      e.status = sel.value;
+      e.admin_notes = notes.value.trim() || null;
+      ok.classList.add('on');
+      drawEnq();
+    } catch (ex){
+      if (ex.message !== 'Signed out') alert('Could not save: ' + ex.message);
+    } finally { saveBtn.disabled = false; }
+  });
+
+  wf.append(row, nLab, notes, ok);
+  body.append(wh, wf);
+
+  draw$.classList.add('on');
+  scrim.classList.add('on');
+  body.scrollTop = 0;
+}
+
+el('eRefresh').addEventListener('click', loadEnquiries);
+['eq','eStatus','eSort'].forEach(id => el(id).addEventListener('input', () => drawEnq()));
+
+el('eCsv').addEventListener('click', () => {
+  const cols = ['created_at','status','name','company','email','phone','division',
+                'message','admin_notes','reviewed_at'];
+  const csv = '﻿' + [cols.join(',')]
+    .concat(visibleEnq().map(e => cols.map(c => csvCell(e[c])).join(',')))
+    .join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'cde-enquiries-' + new Date().toISOString().slice(0,10) + '.csv';
+  link.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ------------------------------------------------------------------ tabs */
+function showTab(which){
+  const apps = which === 'apps';
+  el('panelApps').hidden = !apps;
+  el('panelEnq').hidden  = apps;
+  [['tabApps', apps], ['tabEnq', !apps]].forEach(([id, on]) => {
+    el(id).classList.toggle('on', on);
+    el(id).setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  closeDrawer();
+}
+el('tabApps').addEventListener('click', () => showTab('apps'));
+el('tabEnq').addEventListener('click',  () => showTab('enq'));
 
 /* ------------------------------------------------------------ on load */
 
