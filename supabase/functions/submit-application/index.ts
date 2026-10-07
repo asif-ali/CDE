@@ -222,6 +222,19 @@ async function start(
   ip: string,
   origin: string | null,
 ) {
+  // Honeypot. `website` is rendered off-canvas, out of the tab order and
+  // aria-hidden, so a person never sees it; a form-spam bot fills every field
+  // it finds and is especially drawn to a URL field. Checked before anything
+  // else because it is the cheapest test here, and rejected outright: no row
+  // is created and — the actual point — no signed upload URLs are minted, so
+  // a script cannot put files in the bucket. Logged rather than failing
+  // silently, so that a false positive from a password manager filling an
+  // off-canvas field is diagnosable instead of mysterious.
+  if (String(body.website ?? "").trim() !== "") {
+    console.warn("honeypot tripped on application — rejected before upload URLs were minted");
+    return json({ error: "Something went wrong. Please try again." }, 400, origin);
+  }
+
   if (!await verifyTurnstile(String(body.turnstile_token ?? ""), ip)) {
     return json({ error: "Verification failed. Please tick the checkbox and try again." }, 403, origin);
   }

@@ -143,7 +143,33 @@ supabase secrets set \
 `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are injected automatically. Do not
 set them.
 
-### 5. Cloudflare Turnstile
+### 5. Bot protection
+
+**A honeypot is in place as of 2026-10-07 and needs no setup.** All three
+public forms carry a `website` field rendered off-canvas, out of the tab order
+and `aria-hidden`, which a person never sees and a form-spam bot fills. Both
+Edge Functions check it, and they treat a trip differently on purpose:
+
+- **`submit-application` rejects outright**, before a row is created and
+  before any signed upload URL is minted. Stopping a script from putting
+  files in the bucket is the whole point.
+- **`submit-enquiry` files the row as `spam`** and still answers `{ok:true}`.
+  An enquiry costs nothing to store and cannot be recovered once discarded,
+  so a false positive — a password manager filling an off-canvas field —
+  is one status change away in the dashboard rather than lost in silence.
+  Answering `ok` also means a bot learns nothing from the response.
+
+Both log to the function's console when tripped, so a false positive is
+diagnosable instead of mysterious.
+
+A honeypot stops naive, broad-spectrum form spam. It will not stop anything
+aimed specifically at this site. Together with the per-IP-hash rate limits
+(5 applications and 4 enquiries an hour) that is a reasonable floor, but note
+the rate limit is per IP and anyone rotating addresses walks through it.
+
+**Turnstile is still wired and still optional.** The code below works the
+moment keys are set; it was deferred in favour of the honeypot to avoid adding
+a third-party account. Do it if the forms attract real abuse.
 
 [dash.cloudflare.com](https://dash.cloudflare.com) → Turnstile → Add site.
 Domain: `chemicaldynamicsqatar.com`. Widget mode: **Managed**.

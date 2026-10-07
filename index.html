@@ -346,6 +346,11 @@ form .btn{margin-top:22px;width:100%}
 .fstat.on{display:block}
 .fstat.ok{background:var(--teal-soft);border-color:#B9E4E5;color:#17706F}
 .fstat.err{background:#FDECEC;border-color:#F4C9C9;color:#A23B3B}
+/* Honeypot. Off-canvas rather than display:none — a bot that skips hidden
+   inputs skips display:none too, so hiding it that way would hide it from the
+   bot as well. tabindex="-1" keeps it out of the keyboard tab order and
+   aria-hidden keeps it out of the accessibility tree, so nobody meets it. */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .fnote{font-size:12.5px;margin-top:12px;text-align:center}
 
 /* ---------------- footer ---------------- */
@@ -906,6 +911,12 @@ footer a:hover{color:#8AD8DB}
         </select>
         <label for="ms">Message</label>
         <textarea id="ms" name="message" rows="4" required></textarea>
+        <!-- Not a real field. Paired with the honeypot check in the Edge
+             Function — if you rename it, rename it there too. -->
+        <div class="hp" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
         <button class="btn t" type="submit">Send Enquiry</button>
         <!-- role=status + aria-live: the result is announced without stealing
              focus from the form. -->
@@ -1022,6 +1033,7 @@ async function sendEnquiry(e){
         phone:    g('phone'),
         division: g('division'),
         message:  g('message'),
+        website:  g('website'),
         turnstile: g('cf-turnstile-response')
       })
     });

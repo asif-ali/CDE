@@ -153,6 +153,17 @@ Deno.serve(async (req) => {
     return json({ error: "That email address does not look right." }, 400, origin);
   }
 
+  // Honeypot, the same field the careers form uses — but handled differently
+  // on purpose. An enquiry is cheap to store and impossible to recover once
+  // discarded, so a trip is filed as spam rather than thrown away: it stays
+  // out of the dashboard's default view, and a false positive is one status
+  // change away from being recovered instead of lost in silence. The caller
+  // still gets {ok:true}, so a bot has nothing to learn from the response.
+  if (String(body.website ?? "").trim() !== "") {
+    console.warn("honeypot tripped on enquiry — filed as spam");
+    row.status = "spam";
+  }
+
   try {
     const r = await db("enquiries", { method: "POST", body: JSON.stringify(row) });
     if (!r.ok) {

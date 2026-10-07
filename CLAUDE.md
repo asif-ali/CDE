@@ -65,6 +65,13 @@ did nothing visible on a phone with no mail client — every enquiry sent throug
 silently. `manpower.html` carries the same handler, differing only in that it prefixes `division`
 with "Manpower —".
 
+All three public forms carry an off-canvas `website` honeypot, added 2026-10-07 in place of
+Cloudflare Turnstile (which stays wired but unconfigured). `careers.html` rejects a trip outright
+so no files reach the bucket; the two enquiry forms file it as `spam` instead, because an enquiry
+is cheap to store and impossible to recover once thrown away. `CAREERS-SETUP.md` step 5 has the
+reasoning. **The field name is agreed between the page and the Edge Function — rename it in one
+place and it silently stops working.**
+
 Enquiries land in the `enquiries` table and are read in `admin.html`'s **Enquiries** tab.
 **There is no email notification, by decision** — that tab is the only place an enquiry surfaces,
 which is why it carries an unread count. Adding notification means a database webhook into Resend

@@ -177,6 +177,14 @@ textarea{resize:vertical;min-height:96px}
   color:var(--grey);line-height:1.6}
 .consent.bad{border-color:var(--red);background:var(--red-soft)}
 #turnstile{margin-top:20px;min-height:0}
+/* Honeypot. Off-canvas rather than display:none — a bot that skips hidden
+   inputs skips display:none too, so hiding it that way would hide it from the
+   bot as well. tabindex="-1" keeps it out of the keyboard tab order and
+   aria-hidden keeps it out of the accessibility tree, so nobody meets it.
+   Added 2026-10-07, in place of Turnstile rather than as well as it: the
+   Turnstile wiring above is still here and still works the moment a site key
+   is set. */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .err{display:none;background:var(--red-soft);border:1px solid #EFC9C6;color:#8E2E29;
   border-radius:var(--r);padding:14px 16px;font-size:15px;margin-top:20px}
 .err.on{display:block}
@@ -472,6 +480,15 @@ footer a:hover{color:#8AD8DB}
          Left empty and skipped entirely when the key is still the placeholder,
          so the form works during review — see CAREERS-SETUP.md before launch. -->
     <div id="turnstile"></div>
+
+    <!-- Not a real field. It reaches the Edge Function through the FormData
+         sweep below, which copies every named input into the payload. Paired
+         with the honeypot check there — if you rename it, rename it there
+         too. A filled value is rejected before any upload URL is minted. -->
+    <div class="hp" aria-hidden="true">
+      <label for="website">Website</label>
+      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+    </div>
 
     <div class="err" id="err" role="alert" aria-live="assertive"></div>
     <div class="bar" id="bar"><i></i></div>
