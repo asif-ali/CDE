@@ -34,6 +34,8 @@ at the bottom:
 |---|---|
 | `index.html` | The pitch site. Everything below describes this unless stated otherwise. |
 | `manpower.html` | Manpower Supply Division. Added 2026-10-06. |
+| `products-services.html` | Chemicals, equipment, analyzers and the suppliers list. Split out 2026-10-07. |
+| `it-services.html` | The six IT service groups and the partner block. Split out 2026-10-07. |
 | `careers.html` | Public job application form. Added 2026-08-11. |
 | `admin.html` | HR dashboard — applications and enquiries, Supabase Auth login, private document viewer. |
 
@@ -54,10 +56,16 @@ It was a single self-contained file until the client asked for photography; base
 ~1.2MB of JPEG was worse than a folder, so `assets/` exists now. That is the only reason to add
 one — new *code* still belongs inline.
 
-Structure, top to bottom: sticky header → hero → industries strip → About → Products & Services →
-"New from CDE" band → IT Services → Why CDE → Contact → footer. Sections are linked by
-in-page anchors (`#about`, `#products`, `#digital`, `#why`, `#contact`); `scroll-padding-top`
-compensates for the sticky header.
+`index.html`, top to bottom: sticky header → hero → industries strip → About → the three
+division cards (`#divisions`) → Why CDE → Contact → footer. The division cards are a router, not
+content: each links to its own page. `#about`, `#why` and `#contact` are still in-page anchors
+and `scroll-padding-top` compensates for the sticky header; `#products`, `#suppliers` and
+`#digital` are gone, replaced by `products-services.html`, `products-services.html#suppliers`
+and `it-services.html`.
+
+The three division pages share a shape: a `.hero` carrying the page's own `<h1>`, then the
+sections lifted from the old home page. Each page has exactly one `<h1>` and its own title,
+description and canonical — that is the entire point of the split, so don't collapse them.
 
 The only JavaScript: the footer year, the mobile menu, and `sendEnquiry()`, which posts the
 contact form to the `submit-enquiry` Edge Function. It was a `mailto:` until 2026-10-06, which
@@ -170,42 +178,43 @@ These come from decisions already made with the client; don't reverse them incid
   you need this anyway", not "we're the best IT firm in Qatar". Don't write copy claiming
   technical superiority or a proprietary edge.
 
-## Single page, for now — and why
+## Multi-page since 2026-10-07 — and why
 
-Splitting into a multi-page site was considered on 2026-07-29 and deferred. The reasons, so this
-doesn't get relitigated from scratch:
+The site was one page until 2026-10-07. The split was considered on 2026-07-29, deferred, and
+then done; the reasoning, so it isn't relitigated in either direction:
 
-- There isn't content to fill it — no real photography, no client list (their own Customers page
-  404s), no case study. Four thin pages read worse than one substantial one.
-- ~~There is no mobile menu.~~ Built on 2026-10-06 — `.burger` plus the `.mnav` panel. This
-  objection is now settled, and it was the one that actually blocked a multi-page split.
-- No build step means every page hand-duplicates the header and footer, and they drift. Fixing
-  that properly means a static generator, which costs the "opens from disk, host anywhere"
-  property that makes this easy to hand over.
+**Why it was deferred.** No real photography, no client list (their own Customers page 404s), no
+case study — four thin pages read worse than one substantial one. And there was no mobile menu,
+which made a multi-page site genuinely unusable on a phone.
 
-Revisit once CDE approves the direction and supplies content. The split then mirrors their
-existing nav: Home / Products & Services / IT Services / Suppliers / Contact.
+**What changed.** The mobile menu was built on 2026-10-06. `manpower.html` then demonstrated the
+pattern working: its title targets "manpower supply qatar" and "scaffolders doha", which a
+`#manpower` section never could. A page carries one title, one description and one canonical, and
+Google ranks pages — so one page could only ever compete for one cluster of intent. CDE sells
+three largely unrelated things, which made that ceiling expensive.
 
-**`careers.html` partially overtook this on 2026-08-11**, and both objections above now bite for
-real rather than hypothetically:
+**What was split, and what deliberately wasn't.** Products & Services (with Suppliers) and IT
+Services became pages, joining Manpower. About (190 words), Why CDE (117) and Contact (118)
+stayed as sections on the home page: they have no independent search intent and are far too thin
+to stand as pages. Splitting on the nav rather than on the business lines would have produced
+exactly the thin-content problem that justified deferring in the first place. **If you add a
+page, it needs its own search intent and roughly 400+ words — `manpower.html` at 431 is the
+floor, not the target.**
 
-- The **mobile menu was built on 2026-10-06**, before the site went live, because below 1180px
-  the header had offered no route to the careers page at all — only the footer did, and
-  job-seekers arrive on phones. `.mnav` mirrors `.nlinks` on each page and is toggled with the
-  `hidden` attribute, so the panel leaves the tab order and the accessibility tree when closed.
-  **The two link lists are maintained by hand: add a link to `.nlinks` and you must add it to
-  `.mnav` on the same page.** `admin.html` has no public header and so has no menu.
-- The **header is now duplicated across three files and the footer across two**, and they will
-  drift. `index.html`, `careers.html` and `manpower.html` each carry their own header; the
-  four-column footer is in `index.html` and `manpower.html`, while `careers.html` has a cut-down
-  one with no columns. When you change one, change the others — `.nlinks`, `.mnav`, the brand
-  lockup and the Nexvera credit are the parts that matter. **All three nav link lists are now
-  identical**, eight links in the same order; `careers.html` used to omit Suppliers and Why CDE
-  and that was corrected on 2026-10-06, so a diff between the three headers should come back
-  clean apart from the `.on` marker and whether the hrefs are in-page or `index.html#`-prefixed.
+**The cost, which is now permanent.** With no build step every page hand-duplicates the header
+and footer, and they will drift. That is six files now. `index.html`, `products-services.html`,
+`it-services.html`, `manpower.html` and `careers.html` each carry their own header; the
+four-column footer is in all of those except `careers.html`, which has a cut-down one with no
+columns. `admin.html` has no public header or footer at all.
 
-Neither is a reason to add a build step. Both are reasons to expect the next structural change to
-cost more than this one did.
+**All five public nav link lists are identical** — eight links, same order, differing only in the
+`.on` marker and whether in-page hrefs are bare (`#about` on the home page) or prefixed
+(`index.html#about` everywhere else). A diff between any two headers should be that small. The
+`.nlinks` and `.mnav` lists are maintained by hand and both must be changed together.
+
+Still not a reason to add a build step — that would cost the "opens from disk, host anywhere"
+property that makes this easy to hand over. It is a reason to expect the next structural change
+to cost more than this one did.
 
 ## Assets
 

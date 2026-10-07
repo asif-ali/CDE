@@ -1,6 +1,6 @@
 # CDE — rebrand and diversification concept
 
-A single-page site to present to Chemical Dynamics Enterprises WLL: the CDE brand formalised,
+A site to present to Chemical Dynamics Enterprises WLL: the CDE brand formalised,
 the existing chemicals business intact, and a new IT services offering alongside it.
 
 `index.html` + `assets/` — no build step, no dependencies. Open it in a browser.
@@ -345,6 +345,11 @@ CDE confirms.
 - ~~No mobile menu.~~ Added 2026-10-06: a `.burger` toggle and a panel mirroring the nav.
   (The 1020px figure here was already stale — the breakpoint moved to 1180px on 2026-08-11.)
 - **1.3MB of JPEG.** Converting to WebP would cut it roughly in half and improve LCP.
+- **Split into pages on 2026-10-07.** Products & Services, IT Services and Manpower each have
+  their own page, title, description and canonical; About, Why CDE and Contact stayed as home
+  page sections because they have no independent search intent and were too thin (117–190 words)
+  to stand alone. One page could only ever rank for one cluster of intent, and CDE sells three
+  unrelated things. **Page structure was not the biggest lever, though — the two below are.**
 - **No Google Business Profile link.** For "chemical supplier Doha" this matters more than
   on-page work; the structured data helps only if the profile exists and is claimed.
 
