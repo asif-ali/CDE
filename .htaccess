@@ -1,0 +1,37 @@
+# =====================================================================
+#  CDE — server configuration
+#
+#  Added 2026-10-07, at the cutover from the WordPress site. This is the
+#  only server-side file the site has; everything else is static HTML and
+#  assets. LiteSpeed reads .htaccess exactly as Apache does.
+#
+#  Do not add caching, compression or security headers here without
+#  checking first: LiteSpeed already serves this site gzipped and already
+#  sets cache-control: public, max-age=604800 on assets/.
+# =====================================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Canonical host. WordPress performed this redirect itself, so removing
+  # WordPress removes it — and cPanel points www at the same document
+  # root, which would leave the site answering on both hosts. Every
+  # canonical and og:url on the site names the bare domain.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # The staging folder. /new/ links were shared while the site was being
+  # reviewed; send them to the real page instead of a 404.
+  RewriteRule ^new/?$ / [R=301,L]
+  RewriteRule ^new/(.+)$ /$1 [R=301,L]
+</IfModule>
+
+# HTML must not be cached hard, or an upload is invisible until people
+# hard-refresh — which is exactly what happened during staging. Assets are
+# left on LiteSpeed's default week. Note the consequence: replacing a
+# photograph under assets/ can take up to a week to reach a returning
+# visitor, because the filenames carry no version hash.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>

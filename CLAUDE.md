@@ -39,6 +39,15 @@ at the bottom:
 | `careers.html` | Public job application form. Added 2026-08-11. |
 | `admin.html` | HR dashboard — applications and enquiries, Supabase Auth login, private document viewer. |
 
+`.htaccess` is the only server-side file that ships with the site, added 2026-10-07 at the
+cutover. It does two things and should not quietly grow a third: it 301s `www` to the bare
+domain (WordPress used to do that, and cPanel points `www` at the same document root, so losing
+it would leave the site answering on both hosts), and it 301s the old `/new/` staging paths to
+their real URLs. It also stops HTML being cached, because during staging every upload looked
+like it had failed until the browser was hard-refreshed. Assets stay on LiteSpeed's default
+week — which means **replacing a photograph can take up to a week to reach a returning
+visitor**, since the filenames carry no version hash.
+
 Binary assets live in `assets/`. **No build step and no dependencies** is still the requirement —
 do not introduce a bundler, framework, CSS file or npm dependency, and keep each page's CSS and JS
 inline in that page. The careers pages talk to Supabase over plain `fetch`; there is deliberately
